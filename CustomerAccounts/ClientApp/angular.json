@@ -129,5 +129,8 @@
       }
     }
   },
-  "defaultProject": "CustomerAccounts"
+  "defaultProject": "CustomerAccounts",
+  "cli": {
+    "analytics": "2011810a-dc26-469d-aee9-3ff7c5930566"
+  }
 }
