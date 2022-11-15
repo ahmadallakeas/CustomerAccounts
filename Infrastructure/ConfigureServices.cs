@@ -1,4 +1,8 @@
-﻿using Infrastructure.Persistance;
+﻿using Application.Interfaces.IRepository;
+using Application.Interfaces.IServices;
+using Infrastructure.Persistance;
+using Infrastructure.Persistance.Repository;
+using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +20,7 @@ namespace Infrastructure
         {
             ConfigureDbContext(services, configuration);
             ConfigureRepositoryManager(services);
+            ConfigureServiceManager(services);
         }
         public static void ConfigureDbContext(IServiceCollection services, IConfiguration configuration)
         {
@@ -23,7 +28,11 @@ namespace Infrastructure
         }
         public static void ConfigureRepositoryManager(IServiceCollection services)
         {
-       //     services.AddScoped<IRepositoryManager, RepositoryManager>();
+            services.AddScoped<IRepositoryManager, RepositoryManager>();
+        }
+        public static void ConfigureServiceManager(IServiceCollection services)
+        {
+            services.AddScoped<IServiceManager, ServiceManager>();
         }
     }
 }
