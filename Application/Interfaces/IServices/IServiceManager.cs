@@ -10,5 +10,6 @@ namespace Application.Interfaces.IServices
     public interface IServiceManager
     {
         IAccountService AccountService { get; }
+        ITransactionService TransactionService { get; }
     }
 }

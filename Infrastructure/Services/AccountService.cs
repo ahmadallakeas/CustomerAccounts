@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.IRepository;
+﻿using Application.DataTransfer.RequestParams;
+using Application.Interfaces.IRepository;
 using Application.Interfaces.IServices;
 using Domain.Entities;
 using System;
@@ -18,14 +19,15 @@ namespace Infrastructure.Services
             _repository = repository;
         }
 
-        public async Task<Account> CreateAccountForCustomer(int customerId, double initialCredit, bool trackChanges)
+        public async Task<Account> CreateAccountForCustomer(RequestBody requestBody, bool trackChanges)
         {
-            var customer = await _repository.Customer.GetCustomerAsync(customerId, trackChanges);
-            var account = new Account
+            var customer = await _repository.Customer.GetCustomerAsync(requestBody.customerId, trackChanges);
+            Account account = new Account
             {
                 Customer = customer,
-                CustomerId = customerId,
-                Balance = initialCredit,
+                CustomerId = customer.CustomerId,
+                Balance = requestBody.initialCredit,
+
             };
             return account;
         }

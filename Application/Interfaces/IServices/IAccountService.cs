@@ -1,4 +1,6 @@
-﻿using Application.Interfaces.IRepository;
+﻿using Application.DataTransfer;
+using Application.DataTransfer.RequestParams;
+using Application.Interfaces.IRepository;
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -11,6 +13,6 @@ namespace Application.Interfaces.IServices
     public interface IAccountService
     {
         Task<Account> GetAccountAsync(int id, bool trackChanges);
-        Task<Account> CreateAccountForCustomer(int customerId, double initialCredit, bool trackChanges);
+        Task<Account> CreateAccountForCustomer(RequestBody requestBody, bool trackChanges);
     }
 }
