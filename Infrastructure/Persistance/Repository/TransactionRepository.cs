@@ -18,7 +18,9 @@ namespace Infrastructure.Persistance.Repository
         }
         public void MakeTransaction(int accountId,Transaction transaction)
         {
+            
             transaction.AccountId = accountId;
+            CreateTransaction(transaction);
         }
         public void CreateTransaction(Transaction transaction)
         {

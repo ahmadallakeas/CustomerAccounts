@@ -9,11 +9,12 @@ using System.Threading.Tasks;
 
 namespace Application.DataTransfer
 {
-    public record AccountDto
+    public record TransactionDto
     {
+        public int TransactionId { get; set; }
+        public string TransactionName { get; set; }
+        public string Date { get; set; }
+        public string Message { get; set; }
         public int AccountId { get; set; }
-        public int CustomerId { get; set; }
-        public double Balance { get; set; }
-        public ICollection<TransactionDto>? Transactions { get; set; }
     }
 }

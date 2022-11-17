@@ -10,6 +10,7 @@ namespace Application.Interfaces.IRepository
     public interface IAccountRepository
     {
         Task<Account> GetAccountAsync(int id, bool trackChanges);
-        void CreateAccount(Account account);
+        Task<Account> GetAccountByCustomerId(int customerId, bool trackChanges);
+        void CreateAccount(Account account, int customerId);
     }
 }

@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Application.DataTransfer
 {
-    public record UserDto
+    public record UserInfoDto
     {
         public string FirstName { get; set; }
         public string Surname { get; set; }
         public double Balance { get; set; }
-        public ICollection<Transaction>? Transactions { get; set; }
+        public ICollection<TransactionDto>? Transactions { get; set; }
     }
 }
