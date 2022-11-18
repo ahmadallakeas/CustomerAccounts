@@ -1,4 +1,7 @@
 /* To learn more about this file see: https://angular.io/config/tsconfig. */
+
+
+
 {
   "compileOnSave": false,
   "compilerOptions": {
@@ -21,6 +24,11 @@
     "lib": [
       "es2020",
       "dom"
+    ],
+    "typeRoots": [
+      "node_modules/@types",
+      "node_modules/@angular",
+      "node_modules/@angular/common/http"
     ]
   },
   "angularCompilerOptions": {
