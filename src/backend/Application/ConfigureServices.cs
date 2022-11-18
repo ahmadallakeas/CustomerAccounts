@@ -22,6 +22,7 @@ namespace Application
 
             ConfigureSerilog();
             ConfigureAutoMapper(services);
+            ConfigureCors(services);
         }
         public static void ConfigureSerilog()
         {
@@ -65,6 +66,17 @@ namespace Application
                        }
                    }
                     );
+            });
+        }
+        public static void ConfigureCors(this IServiceCollection services)
+        {
+            services.AddCors(c =>
+            {
+                c.AddPolicy("AllowAll", builder =>
+                builder.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                );
             });
         }
     }
