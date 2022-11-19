@@ -19,7 +19,31 @@ namespace Infrastructure.Persistance.Configurations
                   CustomerId = 1,
                   FirstName = "Ahmad",
                   Surname = "Al Lakeas"
-              }
+              },
+               new Customer
+               {
+                   CustomerId = 2,
+                   FirstName = "John",
+                   Surname = "Michael"
+               },
+                new Customer
+                {
+                    CustomerId =3,
+                    FirstName = "Jalen",
+                    Surname = "Green"
+                },
+                 new Customer
+                 {
+                     CustomerId = 4,
+                     FirstName = "Adam",
+                     Surname = "Watson"
+                 },
+                  new Customer
+                  {
+                      CustomerId = 5,
+                      FirstName = "Steve",
+                      Surname = "Darwin"
+                  }
                 );
         }
     }
