@@ -3,7 +3,8 @@
 1- Clone the repo<br>
 2- Open the solution in visual studio<br>
 3-run update-datbase command in Package Manager Console from within Infrastructure project<br>
-4- run the .net project then navigate to frontend/CustomerAccounts.UI and run "ng serve" in the terminal<br>
+4- Set the presentation project as the startup project then run it<br>
+5-Navigate to frontend/CustomerAccounts.UI and run "npm install" then run "ng serve" in the terminal<br>
 # How to use the application
 # To create an account
 1- Enter the accountId and  initial credit (initial credit should not be negative)<br>
