@@ -31,7 +31,7 @@ export class AddAccountComponent implements OnInit {
         this.successMessage$ =
           'Account for customer with id ' +
           account.customerId +
-          ' has been successfully created and accountId ' +
+          ' has been successfully created and accountId = ' +
           account.accountId;
 
         form.reset();

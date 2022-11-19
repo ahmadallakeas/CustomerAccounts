@@ -4,37 +4,50 @@
     <div class="col-4">
       <form name="myForm" #form="ngForm" (ngSubmit)="getUserInfo(form)">
         <div class="mb-3">
-          <label for="customerId" class="form-label"
-            >Enter your account id:</label
-          >
-          <input type="text" class="form-control" id="accountId" name="accountId" [(ngModel)]="accountId" />
+          <label for="customerId" class="form-label">Enter your account id:</label>
+          <input type="text"
+                 class="form-control"
+                 id="accountId"
+                 name="accountId"
+                 [(ngModel)]="accountId" />
         </div>
 
         <div class="mb-3">
           <button type="submit" class="btn btn-primary">Search</button>
         </div>
         <div class="mb-5" *ngIf="errorMessage">
-        <p class="text-danger">{{errorMessage.Message | json}}</p>
+          <p class="text-danger">{{ errorMessage.Message | json }}</p>
         </div>
-
       </form>
     </div>
     <div class="col-2"></div>
     <div class="col-6" *ngIf="userInfo">
-      <h3 class="text-primary">First Name: <span style="color: black ;">{{userInfo.firstName}}</span></h3>
-      <h3 class="text-primary"> Surname: <span style="color: black ;">{{userInfo.surname}}</span></h3>
-      <h3 class="text-primary">Balance: <span style="color: green ;">{{userInfo.balance}}$</span></h3>
+      <h3 class="text-primary">
+        First Name: <span style="color: black">{{ userInfo.firstName }}</span>
+      </h3>
+      <h3 class="text-primary">
+        Surname: <span style="color: black">{{ userInfo.surname }}</span>
+      </h3>
+      <h3 class="text-primary">
+        Balance: <span style="color: green">{{ userInfo.balance }}$</span>
+      </h3>
       <h3 class="text-primary">Transactions:</h3>
-      <ul class="list-group">
-        <li class="list-group-item" *ngFor="let item of userInfo.transactions">
-          <div>
-            <h6>Transaction Id: {{item.transactionId}}</h6>
-            <h6>Account Id: {{item.accountId}}</h6>
-            <h6>Date: {{item.date}}</h6>
-            <h6>Message: {{item.message}}</h6>
-          </div>
-        </li>
-      </ul>
+      <div *ngIf="userInfo.transactions.length==0">
+        No transactions for this account
+      </div>
+      <div *ngIf="userInfo.transactions.length > 0">
+        <ul class="list-group">
+          <li class="list-group-item"
+              *ngFor="let item of userInfo.transactions">
+            <div>
+              <h6>Transaction Id: {{ item.transactionId }}</h6>
+              <h6>Account Id: {{ item.accountId }}</h6>
+              <h6>Date: {{ item.date }}</h6>
+              <h6>Message: {{ item.message }}</h6>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
