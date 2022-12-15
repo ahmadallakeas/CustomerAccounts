@@ -1,11 +1,13 @@
 ﻿using Application.DataTransfer.RequestParams;
 using Application.Interfaces.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers
 {
     [ApiController]
     [Route("api/customers/{customerId}/accounts")]
+    [Authorize]
     public class AccountController : ControllerBase
     {
         private readonly IServiceManager _serviceManager;

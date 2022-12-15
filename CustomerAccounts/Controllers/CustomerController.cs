@@ -6,7 +6,7 @@ namespace Presentation.Controllers
 {
     [ApiController]
     [Route("api/customers")]
-
+    [Authorize]
     public class CustomerController : ControllerBase
     {
 
