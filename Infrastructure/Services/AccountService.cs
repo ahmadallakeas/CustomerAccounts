@@ -17,26 +17,26 @@ namespace Infrastructure.Services
     {
         private readonly IRepositoryManager _repository;
         private readonly IMapper _mapper;
-        public AccountService(IRepositoryManager repository,IMapper mapper)
+        public AccountService(IRepositoryManager repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
         }
 
-        public async Task<AccountDto> CreateAccountForCustomer(RequestBody requestBody, bool trackChanges)
+        public async Task<AccountDto> CreateAccountForCustomer(int customerId, double initialCredits, bool trackChanges)
         {
-            var customer = await _repository.Customer.GetCustomerAsync(requestBody.customerId, trackChanges);
+            var customer = await _repository.Customer.GetCustomerAsync(customerId, trackChanges);
             if (customer is null)
-                throw new CustomerNotFoundException(requestBody.customerId);
-            if (requestBody.initialCredit < 0.0)
-                throw new CreateAccountBadRequestException(requestBody.initialCredit);
+                throw new CustomerNotFoundException(customerId);
+            if (initialCredits < 0.0)
+                throw new CreateAccountBadRequestException(initialCredits);
             Account account = new Account
             {
 
-                Balance = requestBody.initialCredit,
+                Balance = initialCredits,
 
             };
-            _repository.Account.CreateAccount(account, requestBody.customerId);
+            _repository.Account.CreateAccount(account, customerId);
             await _repository.SaveAsync();
             var account1 = await _repository.Account.GetAccountAsync(account.AccountId, trackChanges);
             var accountToReturn = _mapper.Map<AccountDto>(account1);
@@ -46,7 +46,7 @@ namespace Infrastructure.Services
         public async Task<AccountDto> GetAccountAsync(int id, bool trackChanges)
         {
             var account = await _repository.Account.GetAccountAsync(id, trackChanges);
-            if(account is null)
+            if (account is null)
             {
                 throw new AccountNotFoundException(id);
             }
@@ -54,9 +54,19 @@ namespace Infrastructure.Services
             return accountToReturn;
         }
 
+        public async Task<IEnumerable<AccountDto>> GetAccountsAsync(int customerId, bool trackChanges)
+        {
+            var customer = await _repository.Customer.GetCustomerAsync(customerId, trackChanges);
+            if (customer is null)
+                throw new CustomerNotFoundException(customerId);
+            var accounts = await _repository.Account.GetAccountsAsync(customerId, trackChanges);
+            var accountsDto = _mapper.Map<IEnumerable<AccountDto>>(accounts);
+            return accountsDto;
+        }
+
         public async Task<UserInfoDto> GetUserInfoAsync(int id, bool trackChanges)
         {
-            var account=await _repository.Account.GetAccountAsync(id, trackChanges);
+            var account = await _repository.Account.GetAccountAsync(id, trackChanges);
             if (account is null)
             {
                 throw new AccountNotFoundException(id);

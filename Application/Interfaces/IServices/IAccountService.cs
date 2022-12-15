@@ -13,7 +13,8 @@ namespace Application.Interfaces.IServices
     public interface IAccountService
     {
         Task<AccountDto> GetAccountAsync(int id, bool trackChanges);
-        Task<AccountDto> CreateAccountForCustomer(RequestBody requestBody, bool trackChanges);
+        Task<AccountDto> CreateAccountForCustomer(int customerId, double initialCredits, bool trackChanges);
         Task<UserInfoDto> GetUserInfoAsync(int id, bool trackChanges);
+        Task<IEnumerable<AccountDto>> GetAccountsAsync(int customerId, bool trackChanges);
     }
 }

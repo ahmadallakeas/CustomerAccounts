@@ -15,7 +15,7 @@ namespace Infrastructure.Persistance.Repository
         {
         }
 
-        public void CreateAccount(Account account,int customerId)
+        public void CreateAccount(Account account, int customerId)
         {
             account.CustomerId = customerId;
             Create(account);
@@ -24,8 +24,8 @@ namespace Infrastructure.Persistance.Repository
         public async Task<Account> GetAccountAsync(int id, bool trackChanges)
         {
             return await FindByCondition(u => u.AccountId == id, trackChanges)
-                .Include(c=>c.Customer)
-                .Include(t=>t.Transactions)
+                .Include(c => c.Customer)
+                .Include(t => t.Transactions)
                 .FirstOrDefaultAsync();
         }
         public async Task<Account> GetAccountByCustomerId(int customerId, bool trackChanges)
@@ -34,6 +34,14 @@ namespace Infrastructure.Persistance.Repository
              .Include(c => c.Customer)
              .Include(t => t.Transactions)
              .FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<Account>> GetAccountsAsync(int customerId, bool trackChanges)
+        {
+            return await FindByCondition(a => a.CustomerId == customerId, trackChanges)
+            .Include(c => c.Customer)
+            .Include(t => t.Transactions)
+            .ToListAsync();
         }
     }
 }

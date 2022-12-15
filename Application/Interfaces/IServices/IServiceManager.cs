@@ -11,5 +11,7 @@ namespace Application.Interfaces.IServices
     {
         IAccountService AccountService { get; }
         ITransactionService TransactionService { get; }
+        IAuthenticationService AuthenticationService { get; }
+        ICustomerService CustomerService { get; }
     }
 }

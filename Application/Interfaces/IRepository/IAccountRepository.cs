@@ -9,6 +9,7 @@ namespace Application.Interfaces.IRepository
 {
     public interface IAccountRepository
     {
+        Task<IEnumerable<Account>> GetAccountsAsync(int customerid, bool trackChanges);
         Task<Account> GetAccountAsync(int id, bool trackChanges);
         Task<Account> GetAccountByCustomerId(int customerId, bool trackChanges);
         void CreateAccount(Account account, int customerId);
