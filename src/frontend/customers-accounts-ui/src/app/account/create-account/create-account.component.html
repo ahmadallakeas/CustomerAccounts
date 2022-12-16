@@ -1,0 +1,33 @@
+<ng-template appPlaceholder></ng-template>
+<app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+
+<div class="row my-3" *ngIf="!isLoading">
+  <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+    <h3>Create an account:</h3>
+    <div class="create-form">
+      <form #form="ngForm" (ngSubmit)="onCreate(form)">
+        <div class="m-2">
+          <label class="form-label" for="credit">Enter initial credit</label>
+          <input
+            ngModel
+            name="credit"
+            id="credit"
+            class="form-control"
+            type="number"
+            required
+            placeholder="Initial credit"
+          />
+        </div>
+        <div class="m-2 my-3 text-center">
+          <button
+            type="submit"
+            class="btn btn-success"
+            [disabled]="!form.valid"
+          >
+            Create
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

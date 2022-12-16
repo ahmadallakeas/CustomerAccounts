@@ -1,0 +1,26 @@
+<h4>
+  Name:
+  <span style="color: black">{{
+    accountInfo.firstName + " " + accountInfo.surname
+  }}</span>
+</h4>
+
+<h4>
+  Balance: <span style="color: green">{{ accountInfo.balance }}$</span>
+</h4>
+<h4>Transactions:</h4>
+<div *ngIf="accountInfo.transactions.length == 0">
+  No transactions for this account
+</div>
+<div *ngIf="accountInfo.transactions.length > 0">
+  <ul class="list-group">
+    <li class="list-group-item" *ngFor="let item of accountInfo.transactions">
+      <div>
+        <p>Transaction Id: {{ item.transactionId }}</p>
+        <p>Account Id: {{ item.accountId }}</p>
+        <p>Date: {{ item.date }}</p>
+        <p>Message: {{ item.message }}</p>
+      </div>
+    </li>
+  </ul>
+</div>

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, last, map, of, switchMap, tap } from 'rxjs';
-import { Customer } from 'src/app/shared/Customer.Model';
+import { Customer } from 'src/app/auth/customer.Model';
 import { AuthService } from '../auth.service';
 import * as AuthActions from './auth.actions';
 
@@ -46,9 +46,12 @@ const handleAuthentication = (
 };
 
 const handleError = (errorRes: any) => {
-  console.log(errorRes);
   let errorMessage = 'An unknown error occurred!';
-  if (!errorRes.error || errorRes.statusText === 'Unknown Error') {
+  if (
+    !errorRes.error ||
+    errorRes.statusText === 'Unknown Error' ||
+    errorRes.status == 500
+  ) {
     return of(AuthActions.authenticateFail({ errorMessage }));
   }
   if (errorRes.error.Message) {
@@ -60,10 +63,12 @@ const handleError = (errorRes: any) => {
   return of(AuthActions.authenticateFail({ errorMessage }));
 };
 const handleRegisterError = (errorRes: any) => {
-  console.log(errorRes);
-
   let errorMessage = 'An unknown error occurred!';
-  if (!errorRes.error || errorRes.statusText === 'Unknown Error') {
+  if (
+    !errorRes.error ||
+    errorRes.statusText === 'Unknown Error' ||
+    errorRes.status == 500
+  ) {
     return of(AuthActions.authenticateFail({ errorMessage }));
   }
   var errors = Object.values(errorRes.error);
@@ -84,8 +89,6 @@ export class AuthEffects {
           })
           .pipe(
             map((response: AuthResponseData) => {
-              console.log(response);
-
               return handleAuthentication(
                 response.customerId,
                 response.firstName,
@@ -115,7 +118,6 @@ export class AuthEffects {
           })
           .pipe(
             map((response: AuthResponseData) => {
-              console.log(response);
               return handleAuthentication(
                 response.customerId,
                 response.firstName,
@@ -126,8 +128,6 @@ export class AuthEffects {
               );
             }),
             catchError((errorRes) => {
-              console.log(errorRes);
-
               return handleRegisterError(errorRes);
             })
           );
@@ -172,13 +172,13 @@ export class AuthEffects {
         const loadedCustomer = new Customer(
           customer.customerId,
           customer.firstName,
-          customer.firstName,
+          customer.lastName,
           customer.email,
           customer._token,
           new Date(customer._tokenExpirationDate)
         );
 
-        if (loadedCustomer.token) {
+        if (loadedCustomer) {
           // this.user.next(loadedUser);
           const expirationDuration =
             new Date(customer._tokenExpirationDate).getTime() -

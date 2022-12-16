@@ -1,6 +1,6 @@
 import { state } from '@angular/animations';
 import { Action, createReducer, on } from '@ngrx/store';
-import { Customer } from '../../shared/Customer.Model';
+import { Customer } from '../customer.Model';
 import * as AuthActions from './auth.actions';
 
 export interface State {
@@ -48,6 +48,10 @@ const _authReducer = createReducer(
   on(AuthActions.logout, (state) => ({
     ...state,
     customer: null,
+  })),
+  on(AuthActions.clearError, (state) => ({
+    ...state,
+    errorMessage: null,
   }))
 );
 export function authReducer(state: State, action: Action) {
