@@ -1,0 +1,62 @@
+<ng-template appPlaceholder></ng-template>
+<div class="row">
+  <div *ngIf="isLoading" style="text-align: center">
+    <app-loading-spinner></app-loading-spinner>
+  </div>
+  <div *ngIf="!isLoading">
+    <div class="col-sm-12 col-md-4 col-lg-4">
+      <h1>Login:</h1>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-6">
+      <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+        <div class="m-2">
+          <label class="form-label" for="email">Email Address:</label>
+          <input
+            class="form-control"
+            type="email"
+            id="email"
+            name="email"
+            ngModel
+            required
+            email
+          />
+        </div>
+        <div class="m-2">
+          <label class="form-label" for="password">Password:</label>
+          <input
+            class="form-control"
+            type="password"
+            id="password"
+            name="password"
+            ngModel
+            required
+            minlength="6"
+          />
+        </div>
+        <div class="m-2 my-3">
+          <button
+            class="btn btn-outline-primary"
+            type="submit"
+            [disabled]="!loginForm.valid"
+          >
+            Login
+          </button>
+          <button
+            class="btn btn-outline-warning mx-3"
+            type="button"
+            (click)="onClear(loginForm)"
+          >
+            Clear
+          </button>
+        </div>
+        <div class="m-2">
+          <p>
+            <a class="registerLink" routerLink="/register"
+              >Don't have an account?</a
+            >
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

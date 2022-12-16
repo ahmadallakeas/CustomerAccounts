@@ -1,0 +1,65 @@
+<nav
+  class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3"
+>
+  <div class="container">
+    <h2>
+      <a class="navbar-brand nav-title" style="cursor: pointer" routerLink="/"
+        >CustomersAccounts</a
+      >
+    </h2>
+    <button
+      class="navbar-toggler navbar-light"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target=".navbar-collapse"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="nav-ul-container navbar-collapse collapse ml-auto text-center">
+      <ul class="my-nav navbar-nav">
+        <li class="nav-content nav-item" *ngIf="isAuthenticated">
+          <a
+            class="nav-link"
+            style="cursor: pointer"
+            routerLink="/"
+            routerLinkActive="active"
+            >Home</a
+          >
+        </li>
+        <li
+          class="nav-content nav-item"
+          *ngIf="isAuthenticated"
+          routerLink="/account/create"
+        >
+          <a class="nav-link" style="cursor: pointer">Create Account</a>
+        </li>
+        <li class="nav-content nav-item" *ngIf="isAuthenticated">
+          <a class="nav-link" style="cursor: pointer" routerLink="/account/info"
+            >Account Info</a
+          >
+        </li>
+
+        <li class="nav-content nav-item">
+          <div *ngIf="!isAuthenticated">
+            <a class="nav-link" routerLink="/login"> Login</a>
+          </div>
+        </li>
+        <li class="nav-content nav-item" *ngIf="isAuthenticated">
+          <div *ngIf="isAuthenticated">
+            <a class="nav-link" (click)="onLogout()" style="cursor: pointer">
+              Logout</a
+            >
+          </div>
+        </li>
+        <li class="nav-content nav-item">
+          <div class="name-div" *ngIf="isAuthenticated">
+            <p>{{ name }}</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

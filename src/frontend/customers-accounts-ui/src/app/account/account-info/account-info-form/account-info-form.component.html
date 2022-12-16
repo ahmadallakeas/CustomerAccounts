@@ -1,0 +1,19 @@
+<form #form="ngForm" (ngSubmit)="onCreate(form)">
+  <div class="m-2">
+    <label class="form-label" for="accountId">Enter Account Id</label>
+    <input
+      ngModel
+      name="accountId"
+      id="accountId"
+      class="form-control"
+      type="number"
+      required
+      placeholder="Account Id"
+    />
+  </div>
+  <div class="m-2 my-3 text-center">
+    <button type="submit" class="btn btn-success" [disabled]="!form.valid">
+      Get Info
+    </button>
+  </div>
+</form>

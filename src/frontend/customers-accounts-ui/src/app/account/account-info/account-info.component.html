@@ -1,0 +1,17 @@
+<ng-template appPlaceholder></ng-template>
+<app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+<div class="row my-3" *ngIf="!isLoading">
+  <div class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
+    <h3>Get account info</h3>
+    <div class="form-wrapper">
+      <app-account-info-form></app-account-info-form>
+    </div>
+  </div>
+  <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2"></div>
+  <div class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
+    <app-account-info-details
+      *ngIf="accountInfo"
+      [accountInfo]="accountInfo"
+    ></app-account-info-details>
+  </div>
+</div>
