@@ -11,5 +11,8 @@ namespace Application.Exceptions
         public AccountNotFoundException(int id) : base($"The account with id {id} doesn't exist")
         {
         }
+        public AccountNotFoundException(int customerId, int accountId) : base($"Account id is incorrect")
+        {
+        }
     }
 }

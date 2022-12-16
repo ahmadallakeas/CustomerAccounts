@@ -54,6 +54,17 @@ namespace Infrastructure.Services
             return accountToReturn;
         }
 
+        public async Task<AccountDto> GetAccountForCustomerAsync(int customerId, int accountId, bool trackChanges)
+        {
+            var account = await _repository.Account.GetAccountByCustomerIdAsync(customerId, accountId, trackChanges);
+            if (account is null)
+            {
+                throw new AccountNotFoundException(customerId, accountId);
+            }
+            var accountToReturn = _mapper.Map<AccountDto>(account);
+            return accountToReturn;
+        }
+
         public async Task<IEnumerable<AccountDto>> GetAccountsAsync(int customerId, bool trackChanges)
         {
             var customer = await _repository.Customer.GetCustomerAsync(customerId, trackChanges);

@@ -18,14 +18,14 @@ namespace Presentation.Controllers
             _logger = logger;
         }
         [HttpGet("{id:int}", Name = "GetAccount")]
-        public async Task<IActionResult> GetAccountAsync(int id)
+        public async Task<IActionResult> GetAccount(int id)
         {
             var account = await _serviceManager.AccountService.GetAccountAsync(id, trackChanges: false);
             return Ok(account);
 
         }
         [HttpGet(Name = "GetAccounts")]
-        public async Task<IActionResult> GetAccountsAsync(int customerId)
+        public async Task<IActionResult> GetAccounts(int customerId)
         {
             var accounts = await _serviceManager.AccountService.GetAccountsAsync(customerId, trackChanges: false);
             return Ok(accounts);
@@ -38,7 +38,7 @@ namespace Presentation.Controllers
             return Ok(info);
 
         }
-        [HttpPost("CreateAccount")]
+        [HttpPost]
         public async Task<IActionResult> CreateAccountAsync(int customerId, [FromQuery] double initialCredits)
         {
             var account = await _serviceManager.AccountService.CreateAccountForCustomer(customerId, initialCredits, trackChanges: false);
@@ -47,8 +47,8 @@ namespace Presentation.Controllers
             {
                 await _serviceManager.TransactionService.SendTransactionForAccount(account.AccountId, trackChanges: false);
             }
-            account = await _serviceManager.AccountService.GetAccountAsync(account.AccountId, trackChanges: false);
-            return CreatedAtRoute("GetAccount", new { id = account.AccountId }, account);
+            account = await _serviceManager.AccountService.GetAccountForCustomerAsync(customerId, account.AccountId, trackChanges: false);
+            return CreatedAtAction(nameof(GetAccount), new { id = account.AccountId }, account);
 
         }
     }

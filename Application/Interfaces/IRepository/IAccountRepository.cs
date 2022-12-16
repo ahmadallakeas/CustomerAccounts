@@ -11,7 +11,8 @@ namespace Application.Interfaces.IRepository
     {
         Task<IEnumerable<Account>> GetAccountsAsync(int customerid, bool trackChanges);
         Task<Account> GetAccountAsync(int id, bool trackChanges);
-        Task<Account> GetAccountByCustomerId(int customerId, bool trackChanges);
+
+        Task<Account> GetAccountByCustomerIdAsync(int customerId, int accountId, bool trackChanges);
         void CreateAccount(Account account, int customerId);
     }
 }
