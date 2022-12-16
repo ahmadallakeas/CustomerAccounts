@@ -15,7 +15,7 @@ namespace Application.Interfaces.IServices
         Task<AccountDto> GetAccountAsync(int id, bool trackChanges);
         Task<AccountDto> GetAccountForCustomerAsync(int customerId, int accountId, bool trackChanges);
         Task<AccountDto> CreateAccountForCustomer(int customerId, double initialCredits, bool trackChanges);
-        Task<UserInfoDto> GetUserInfoAsync(int id, bool trackChanges);
+        Task<UserInfoDto> GetUserInfoAsync(int customerId, int accountId, bool trackChanges);
         Task<IEnumerable<AccountDto>> GetAccountsAsync(int customerId, bool trackChanges);
     }
 }

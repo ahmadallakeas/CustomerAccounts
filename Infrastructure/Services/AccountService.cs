@@ -75,12 +75,12 @@ namespace Infrastructure.Services
             return accountsDto;
         }
 
-        public async Task<UserInfoDto> GetUserInfoAsync(int id, bool trackChanges)
+        public async Task<UserInfoDto> GetUserInfoAsync(int customerId, int accountId, bool trackChanges)
         {
-            var account = await _repository.Account.GetAccountAsync(id, trackChanges);
+            var account = await _repository.Account.GetAccountByCustomerIdAsync(customerId, accountId, trackChanges);
             if (account is null)
             {
-                throw new AccountNotFoundException(id);
+                throw new AccountNotFoundException(customerId, accountId);
             }
             var result = _mapper.Map<UserInfoDto>(account);
             return result;

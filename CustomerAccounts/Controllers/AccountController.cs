@@ -31,10 +31,10 @@ namespace Presentation.Controllers
             return Ok(accounts);
 
         }
-        [HttpGet("{id:int}/userInfo", Name = "GetUserInfo")]
-        public async Task<IActionResult> GetUserInfoAsync(int id)
+        [HttpGet("{accountId:int}/userInfo", Name = "GetUserInfo")]
+        public async Task<IActionResult> GetUserInfoAsync(int customerId, int accountId)
         {
-            var info = await _serviceManager.AccountService.GetUserInfoAsync(id, trackChanges: false);
+            var info = await _serviceManager.AccountService.GetUserInfoAsync(customerId, accountId, trackChanges: false);
             return Ok(info);
 
         }
