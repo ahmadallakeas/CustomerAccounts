@@ -12,19 +12,20 @@ namespace Application.DataTransfer.Response
         {
         }
 
-        public LoginResponse(string firstName, string lastName, string email, TokenDto tokenDto, int expiresIn)
+        public LoginResponse(string firstName, string lastName, string email, string token, int expiresIn, int customerId)
         {
             FirstName = firstName;
             LastName = lastName;
             Email = email;
-            Token = tokenDto;
+            Token = token;
             ExpiresIn = expiresIn;
+            CustomerId = customerId;
         }
-
+        public int CustomerId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
-        public TokenDto Token { get; set; }
+        public string Token { get; set; }
         public int ExpiresIn { get; set; }
     }
 }

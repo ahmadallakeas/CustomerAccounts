@@ -19,9 +19,20 @@ namespace Application
     {
         public static void AddApplicationServices(this IServiceCollection services)
         {
-
+            ConfigureCors(services);
             ConfigureSerilog();
             ConfigureAutoMapper(services);
+        }
+        public static void ConfigureCors(this IServiceCollection services)
+        {
+            services.AddCors(c =>
+            {
+                c.AddPolicy("AllowAll", builder =>
+                builder.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                );
+            });
         }
         public static void ConfigureSerilog()
         {
@@ -53,7 +64,7 @@ namespace Application
                            switch
                            {
                                NotFoundException => StatusCodes.Status404NotFound,
-                               BadRequestException=>StatusCodes.Status400BadRequest,
+                               BadRequestException => StatusCodes.Status400BadRequest,
                                _ => StatusCodes.Status500InternalServerError
                            };
                            Log.Error($"Something went wrong: {contextFeature.Error}");

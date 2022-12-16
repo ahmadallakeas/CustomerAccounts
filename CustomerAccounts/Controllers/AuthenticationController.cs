@@ -23,7 +23,7 @@ namespace Presentation.Controllers
             var result = await _serviceManager.AuthenticationService.RegisterCustomerAsync(customerForRegistration);
             if (!result.Succeeded)
             {
-                foreach (var error in result.Errors)
+                foreach (var error in result.Errors.Where(s => s.Code != "DuplicateUserName"))
                 {
                     ModelState.TryAddModelError(error.Code, error.Description);
                 }
@@ -31,12 +31,22 @@ namespace Presentation.Controllers
             }
             var user = await _serviceManager.AuthenticationService.GetAuthenticationUserAsync(customerForRegistration.Email);
             var customer = await _serviceManager.CustomerService.CreateCustomerAsync(customerForRegistration, user.Id, trackChanges: false);
-            return StatusCode(201);
+            //LoginResponse response = new LoginResponse()
+            //{
+            //    CustomerId = customer.CustomerId,
+            //    Email = customer.Email,
+            //    FirstName = customer.FirstName,
+            //    LastName = customer.LastName,
+            //    Token = await _serviceManager.AuthenticationService.CreateTokenAsync(),
+            //    ExpiresIn = 60 * 60
+            //};
+            return await Authenticate(new CustomerForLoginDto() { Email = customerForRegistration.Email, Password = customerForRegistration.Password });
 
         }
         [HttpPost("login")]
         public async Task<IActionResult> Authenticate([FromBody] CustomerForLoginDto customerForLogin)
         {
+
             if (!await _serviceManager.AuthenticationService.ValidateCustomerAsync(customerForLogin))
             {
                 return Unauthorized();
@@ -45,6 +55,7 @@ namespace Presentation.Controllers
             var customer = await _serviceManager.CustomerService.GetCustomerByLoginAsync(user.Id, trackChanges: false);
             LoginResponse response = new LoginResponse()
             {
+                CustomerId = customer.CustomerId,
                 Email = customer.Email,
                 FirstName = customer.FirstName,
                 LastName = customer.LastName,

@@ -1,5 +1,6 @@
 ﻿using Application.Configurations;
 using Application.DataTransfer;
+using Application.Exceptions;
 using Application.Interfaces.IServices;
 using AutoMapper;
 using Domain.Entities;
@@ -42,21 +43,26 @@ namespace Infrastructure.Services
 
         public async Task<bool> ValidateCustomerAsync(CustomerForLoginDto customerForLogin)
         {
-            _user = await _manager.FindByEmailAsync(customerForLogin.Email);
+            _user = await GetAuthenticationUserAsync(customerForLogin.Email);
             return (_user != null && await _manager.CheckPasswordAsync(_user, customerForLogin.Password));
         }
 
         public async Task<AuthenticationUser> GetAuthenticationUserAsync(string email)
         {
-            return await _manager.FindByEmailAsync(email);
+            var user1 = await _manager.FindByEmailAsync(email);
+            if (user1 is null)
+            {
+                throw new CustomerNotFoundException(email);
+            }
+            return user1;
         }
-        public async Task<TokenDto> CreateTokenAsync()
+        public async Task<string> CreateTokenAsync()
         {
             var signingCredentials = GetSigningCredentials();
             var claims = await GetClaims();
             var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
             var accessToken = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-            return new TokenDto(accessToken);
+            return accessToken;
 
         }
 
