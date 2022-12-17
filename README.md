@@ -6,49 +6,35 @@
 4- Set the presentation project as the startup project then run it<br>
 5-Navigate to frontend/CustomerAccounts.UI and run "npm install" then run "ng serve" in the terminal<br>
 # How to use the application
-# To create an account
-1- Enter the accountId and  initial credit (initial credit should not be negative)<br>
-        &nbsp; List of available Customers:<br>
-             
-             {
-                  CustomerId = 1,
-                  FirstName = "Ahmad",
-                  Surname = "Al Lakeas"
-              }
-      
-              {
-                   CustomerId = 2,
-                   FirstName = "John",
-                   Surname = "Michael"
-              }
-             
-              {
-                    CustomerId =3,
-                    FirstName = "Jalen",
-                    Surname = "Green"
-               }
-                
-               {
-                     CustomerId = 4,
-                     FirstName = "Adam",
-                     Surname = "Watson"
-               }
-                  
-               {
-                      CustomerId = 5,
-                      FirstName = "Steve",
-                      Surname = "Darwin"
-               }
-![image](https://user-images.githubusercontent.com/96916039/202863862-4055933b-1cf1-4c7d-83fa-7d778f92a86a.png)
-![image](https://user-images.githubusercontent.com/96916039/202864188-41e1a34f-c2dd-413f-ac85-b5fff18cccd5.png)<br /><br />
-If you click the "Click here to view your accounts details" you will navigate to a new page that displays the account info<br /><br>
-![image](https://user-images.githubusercontent.com/96916039/202864262-234afe63-ce94-41fd-9c58-ca90561843f0.png)
 
-# To Get Account Info
-1- Navigate to User Info page from the navbar<br>
-![image](https://user-images.githubusercontent.com/96916039/202864664-91eb4ede-6925-45e4-8caa-8373651ac8aa.png)<br><br>
-2- Enter your accountId and click search<br>
-![image](https://user-images.githubusercontent.com/96916039/202864698-50ea0901-975c-4a54-af2e-97cab16031ad.png)
+
+1- Open the website url in your browser
+2- Login or create a new account ( a Customer account which will be used for authentication and accounts creation)<br /><br />
+Login page:
+<br /><br />
+![image](https://user-images.githubusercontent.com/96916039/208209516-883c88a8-54f2-408e-9094-654dec432f28.png)
+<br /><br />
+Register page:
+<br /><br />
+![image](https://user-images.githubusercontent.com/96916039/208210342-ff282dee-5952-4232-8e6a-c02105d523de.png)
+<br /><br />
+# To create an account
+1- Navigate to the create account page either from the navigation bar or by clicking create account:<br/> <br/>
+![image](https://user-images.githubusercontent.com/96916039/208210804-efdcab21-32d0-4a00-98af-3ab577e8dac9.png)
+<br/> <br/>
+2- Enter the initial credits and click create
+<br/> <br/>
+![image](https://user-images.githubusercontent.com/96916039/208211255-8834b236-d86e-4380-af75-55471871f4be.png)
+# To Get Your Account Info:
+1- Navigate to the get info page:<br/>
+2- Enter your account id:
+<br/><br/>
+![image](https://user-images.githubusercontent.com/96916039/208211366-90241547-56a5-4821-909d-daaba119df1c.png)
+<br/><br/>
+3- The result page
+<br/><br/>
+![image](https://user-images.githubusercontent.com/96916039/208212097-8aa1409c-2fe4-4c16-9592-15cd0237313f.png)
+<br/><br/>
 
 
 # Contact
