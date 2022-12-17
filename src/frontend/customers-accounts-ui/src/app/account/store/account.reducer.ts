@@ -50,6 +50,10 @@ const _accountReducer = createReducer(
   on(AccountActions.clearError, (state) => ({
     ...state,
     message: null,
+  })),
+  on(AccountActions.resetAccountInfo, (state) => ({
+    ...state,
+    accountInfo: null,
   }))
 );
 
