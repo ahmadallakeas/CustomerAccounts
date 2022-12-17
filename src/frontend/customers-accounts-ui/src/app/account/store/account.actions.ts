@@ -39,5 +39,5 @@ export const createAccountFail = createAction(
     message: string;
   }>()
 );
-
+export const resetAccountInfo = createAction('[From Account] Rester User Info');
 export const clearError = createAction('[Auth] Clear Error');
