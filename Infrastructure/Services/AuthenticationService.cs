@@ -7,6 +7,7 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -52,8 +53,10 @@ namespace Infrastructure.Services
             var user1 = await _manager.FindByEmailAsync(email);
             if (user1 is null)
             {
+                Log.Error($"Customer with email {email} does not exist");
                 throw new CustomerNotFoundException(email);
             }
+            _user = user1;
             return user1;
         }
         public async Task<string> CreateTokenAsync()
@@ -90,11 +93,6 @@ namespace Infrastructure.Services
             {
                 new Claim(ClaimTypes.Name, _user.UserName)
             };
-            //var roles = await _manager.GetRolesAsync(_user);
-            //foreach (var role in roles)
-            //{
-            //    claims.Add(new Claim(ClaimTypes.Role, role));
-            //}
             return claims;
         }
 

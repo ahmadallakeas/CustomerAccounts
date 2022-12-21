@@ -10,7 +10,7 @@ namespace Application.Interfaces.IRepository
     public interface ICustomerRepository
     {
         Task<Customer> GetCustomerAsync(int customerId, bool trackChanges);
-        Task<Customer> GetCustomerByLoginAsync(int accountId, bool trackChanges);
+        Task<Customer> GetCustomerByLoginAsync(int id, bool trackChanges);
         void CreateCustomer(Customer customer, int userId);
     }
 }

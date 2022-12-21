@@ -28,9 +28,9 @@ namespace Infrastructure.Persistance.Repository
                 .Include(c => c.Accounts)
                 .SingleOrDefaultAsync();
         }
-        public async Task<Customer> GetCustomerByLoginAsync(int accountId, bool trackChanges)
+        public async Task<Customer> GetCustomerByLoginAsync(int id, bool trackChanges)
         {
-            return await FindByCondition(c => c.AuthenticationUserId == accountId, trackChanges)
+            return await FindByCondition(c => c.AuthenticationUserId == id, trackChanges)
               .Include(c => c.User)
               .Include(c => c.Accounts)
               .SingleOrDefaultAsync();
