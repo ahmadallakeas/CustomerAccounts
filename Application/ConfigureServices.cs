@@ -1,6 +1,7 @@
 ﻿using Application.Configurations;
 using Application.ErrorModels;
 using Application.Exceptions;
+using Application.formatters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
@@ -78,5 +79,7 @@ namespace Application
                     );
             });
         }
+        public static IMvcBuilder AddCustomCSVFormatter(this IMvcBuilder builder)
+          => builder.AddMvcOptions(config => config.OutputFormatters.Add(new CsvOutputFormatter()));
     }
 }

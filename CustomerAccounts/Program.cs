@@ -11,7 +11,8 @@ builder.Services.AddApplicationServices();
 builder.Services.AddControllers(options => options.SuppressAsyncSuffixInActionNames = false).AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 
-);
+).AddCustomCSVFormatter()
+.AddXmlDataContractSerializerFormatters();
 
 
 var app = builder.Build();
