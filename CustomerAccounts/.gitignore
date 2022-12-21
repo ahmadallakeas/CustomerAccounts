@@ -229,3 +229,8 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+
+**/.angular/cache/
+**/node_modules
+**/.vs
+**/.vscode

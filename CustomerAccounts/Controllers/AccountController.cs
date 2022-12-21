@@ -8,6 +8,7 @@ namespace Presentation.Controllers
     [ApiController]
     [Route("api/customers/{customerId}/accounts")]
     [Authorize]
+    [Produces("application/json")]
     public class AccountController : ControllerBase
     {
         private readonly IServiceManager _serviceManager;
@@ -18,6 +19,8 @@ namespace Presentation.Controllers
             _logger = logger;
         }
         [HttpGet("{id:int}", Name = "GetAccount")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAccount(int id)
         {
             var account = await _serviceManager.AccountService.GetAccountAsync(id, trackChanges: false);
@@ -25,6 +28,8 @@ namespace Presentation.Controllers
 
         }
         [HttpGet(Name = "GetAccounts")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAccounts(int customerId)
         {
             var accounts = await _serviceManager.AccountService.GetAccountsAsync(customerId, trackChanges: false);
@@ -32,6 +37,8 @@ namespace Presentation.Controllers
 
         }
         [HttpGet("{accountId:int}/userInfo", Name = "GetUserInfo")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetUserInfoAsync(int customerId, int accountId)
         {
             var info = await _serviceManager.AccountService.GetUserInfoAsync(customerId, accountId, trackChanges: false);
@@ -39,6 +46,9 @@ namespace Presentation.Controllers
 
         }
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateAccountAsync(int customerId, [FromQuery] double initialCredits)
         {
             var account = await _serviceManager.AccountService.CreateAccountForCustomer(customerId, initialCredits, trackChanges: false);

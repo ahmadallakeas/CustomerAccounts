@@ -4,6 +4,7 @@ using Application.Interfaces.IRepository;
 using Application.Interfaces.IServices;
 using AutoMapper;
 using Domain.Entities;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,18 +40,20 @@ namespace Infrastructure.Services
             var customer = await _repository.Customer.GetCustomerAsync(id, trackChanges);
             if (customer is null)
             {
+                Log.Error($"Customer with id {id} does not exist");
                 throw new CustomerNotFoundException(id);
             }
             var customerToReturn = _mapper.Map<CustomerDto>(customer);
             return customerToReturn;
         }
 
-        public async Task<CustomerDto> GetCustomerByLoginAsync(int accountId, bool trackChanges)
+        public async Task<CustomerDto> GetCustomerByLoginAsync(int id, bool trackChanges)
         {
-            var customer = await _repository.Customer.GetCustomerByLoginAsync(accountId, trackChanges);
+            var customer = await _repository.Customer.GetCustomerByLoginAsync(id, trackChanges);
             if (customer is null)
             {
-                throw new CustomerNotFoundException(accountId);
+                Log.Error($"Customer with id {id} does not exist");
+                throw new CustomerNotFoundException(id);
             }
             var customerToReturn = _mapper.Map<CustomerDto>(customer);
             return customerToReturn;

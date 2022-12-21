@@ -5,6 +5,7 @@ using Application.Interfaces.IRepository;
 using Application.Interfaces.IServices;
 using AutoMapper;
 using Domain.Entities;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,9 +28,16 @@ namespace Infrastructure.Services
         {
             var customer = await _repository.Customer.GetCustomerAsync(customerId, trackChanges);
             if (customer is null)
+            {
+                Log.Error($"Customer with id {customerId} does not exist");
                 throw new CustomerNotFoundException(customerId);
+
+            }
             if (initialCredits < 0.0)
+            {
+                Log.Error($"Error in input data, initial credit less than 0");
                 throw new CreateAccountBadRequestException(initialCredits);
+            }
             Account account = new Account
             {
 
@@ -48,6 +56,7 @@ namespace Infrastructure.Services
             var account = await _repository.Account.GetAccountAsync(id, trackChanges);
             if (account is null)
             {
+                Log.Error($"Account with id {id} does not exist");
                 throw new AccountNotFoundException(id);
             }
             var accountToReturn = _mapper.Map<AccountDto>(account);
@@ -59,6 +68,7 @@ namespace Infrastructure.Services
             var account = await _repository.Account.GetAccountByCustomerIdAsync(customerId, accountId, trackChanges);
             if (account is null)
             {
+                Log.Error($"Account with id {accountId} does not exist");
                 throw new AccountNotFoundException(customerId, accountId);
             }
             var accountToReturn = _mapper.Map<AccountDto>(account);
@@ -69,7 +79,10 @@ namespace Infrastructure.Services
         {
             var customer = await _repository.Customer.GetCustomerAsync(customerId, trackChanges);
             if (customer is null)
+            {
+                Log.Error($"Customer with id {customerId} does not exist");
                 throw new CustomerNotFoundException(customerId);
+            }
             var accounts = await _repository.Account.GetAccountsAsync(customerId, trackChanges);
             var accountsDto = _mapper.Map<IEnumerable<AccountDto>>(accounts);
             return accountsDto;
@@ -80,6 +93,7 @@ namespace Infrastructure.Services
             var account = await _repository.Account.GetAccountByCustomerIdAsync(customerId, accountId, trackChanges);
             if (account is null)
             {
+                Log.Error($"Account with id {accountId} does not exist");
                 throw new AccountNotFoundException(customerId, accountId);
             }
             var result = _mapper.Map<UserInfoDto>(account);
