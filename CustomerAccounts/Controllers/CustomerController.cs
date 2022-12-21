@@ -18,6 +18,8 @@ namespace Presentation.Controllers
             _logger = logger;
 
         }
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetCustomerAsync(int id)
         {
