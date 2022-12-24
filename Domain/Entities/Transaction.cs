@@ -10,7 +10,7 @@ namespace Domain.Entities
 {
     public class Transaction
     {
-        public int TransactionId { get; set; }
+        public string TransactionId { get; set; }
         [Required(ErrorMessage = "This field TransactionName is required")]
         public string TransactionName { get; set; }
         [Required(ErrorMessage = "This field Date is required")]
@@ -20,6 +20,6 @@ namespace Domain.Entities
         public Account Account { get; set; }
         [ForeignKey(nameof(Account))]
         [Required(ErrorMessage = "This field AccountId is required")]
-        public int AccountId { get; set; }
+        public string AccountId { get; set; }
     }
 }

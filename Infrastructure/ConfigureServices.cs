@@ -45,7 +45,7 @@ namespace Infrastructure
         }
         public static void ConfigureIdentity(IServiceCollection services)
         {
-            var builder = services.AddIdentity<AuthenticationUser, IdentityRole<int>>(
+            var builder = services.AddIdentity<AuthenticationUser, IdentityRole<string>>(
             o =>
             {
                 o.Password.RequireDigit = false;

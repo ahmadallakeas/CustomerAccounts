@@ -18,10 +18,10 @@ namespace Presentation.Controllers
             _serviceManager = serviceManager;
             _logger = logger;
         }
-        [HttpGet("{id:int}", Name = "GetAccount")]
+        [HttpGet("{id}", Name = "GetAccount")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetAccount(int id)
+        public async Task<IActionResult> GetAccount(string id)
         {
             var account = await _serviceManager.AccountService.GetAccountAsync(id, trackChanges: false);
             return Ok(account);
@@ -30,16 +30,16 @@ namespace Presentation.Controllers
         [HttpGet(Name = "GetAccounts")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetAccounts(int customerId)
+        public async Task<IActionResult> GetAccounts(string customerId)
         {
             var accounts = await _serviceManager.AccountService.GetAccountsAsync(customerId, trackChanges: false);
             return Ok(accounts);
 
         }
-        [HttpGet("{accountId:int}/userInfo", Name = "GetUserInfo")]
+        [HttpGet("{accountId}/userInfo", Name = "GetUserInfo")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetUserInfoAsync(int customerId, int accountId)
+        public async Task<IActionResult> GetUserInfoAsync(string customerId, string accountId)
         {
             var info = await _serviceManager.AccountService.GetUserInfoAsync(customerId, accountId, trackChanges: false);
             return Ok(info);
@@ -49,7 +49,7 @@ namespace Presentation.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateAccountAsync(int customerId, [FromQuery] double initialCredits)
+        public async Task<IActionResult> CreateAccountAsync(string customerId, [FromQuery] double initialCredits)
         {
             var account = await _serviceManager.AccountService.CreateAccountForCustomer(customerId, initialCredits, trackChanges: false);
 

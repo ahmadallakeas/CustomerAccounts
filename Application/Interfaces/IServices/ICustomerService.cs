@@ -9,8 +9,8 @@ namespace Application.Interfaces.IServices
 {
     public interface ICustomerService
     {
-        Task<CustomerDto> GetCustomerByLoginAsync(int id, bool trackChanges);
-        Task<CustomerDto> GetCustomerAsync(int id, bool trackChanges);
-        Task<CustomerDto> CreateCustomerAsync(CustomerForRegistrationDto customerForRegistration, int userId, bool trackChanges);
+        Task<CustomerDto> GetCustomerByLoginAsync(string id, bool trackChanges);
+        Task<CustomerDto> GetCustomerAsync(string id, bool trackChanges);
+        Task<CustomerDto> CreateCustomerAsync(CustomerForRegistrationDto customerForRegistration, string userId, bool trackChanges);
     }
 }

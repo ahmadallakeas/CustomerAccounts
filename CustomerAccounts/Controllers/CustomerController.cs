@@ -20,8 +20,8 @@ namespace Presentation.Controllers
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetCustomerAsync(int id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetCustomerAsync(string id)
         {
             var company = await _serviceManager.CustomerService.GetCustomerAsync(id, trackChanges: false);
             return Ok(company);

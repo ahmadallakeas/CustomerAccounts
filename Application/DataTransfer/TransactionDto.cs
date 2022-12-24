@@ -11,10 +11,10 @@ namespace Application.DataTransfer
 {
     public record TransactionDto
     {
-        public int TransactionId { get; set; }
+        public string TransactionId { get; set; }
         public string TransactionName { get; set; }
         public string Date { get; set; }
         public string Message { get; set; }
-        public int AccountId { get; set; }
+        public string AccountId { get; set; }
     }
 }

@@ -10,11 +10,11 @@ namespace Domain.Entities
 {
     public class Account
     {
-        public int AccountId { get; set; }
+        public string AccountId { get; set; }
         public Customer? Customer { get; set; }
         [ForeignKey(nameof(Customer))]
         [Required(ErrorMessage = "This field CustomerId is required")]
-        public int CustomerId { get; set; }
+        public string CustomerId { get; set; }
         [Required(ErrorMessage = "This field Balance is required")]
         public double Balance { get; set; }
         public ICollection<Transaction>? Transactions { get; set; }

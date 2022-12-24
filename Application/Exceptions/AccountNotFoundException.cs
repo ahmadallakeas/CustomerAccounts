@@ -8,10 +8,10 @@ namespace Application.Exceptions
 {
     public sealed class AccountNotFoundException : NotFoundException
     {
-        public AccountNotFoundException(int id) : base($"The account with id {id} doesn't exist")
+        public AccountNotFoundException(string id) : base($"The account with id {id} doesn't exist")
         {
         }
-        public AccountNotFoundException(int customerId, int accountId) : base($"Account id is incorrect")
+        public AccountNotFoundException(string customerId, string accountId) : base($"Account id is incorrect")
         {
         }
     }

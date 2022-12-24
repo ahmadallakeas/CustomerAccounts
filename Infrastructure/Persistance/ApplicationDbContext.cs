@@ -1,6 +1,5 @@
 ﻿using Application.Interfaces;
 using Domain.Entities;
-using Infrastructure.Persistance.Configurations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -9,10 +8,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Infrastructure.Persistance
 {
-    public class ApplicationDbContext : IdentityDbContext<AuthenticationUser, IdentityRole<int>, int>, IApplicationDbContext
+    public class ApplicationDbContext : IdentityDbContext<AuthenticationUser, IdentityRole<string>, string>, IApplicationDbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }
@@ -23,7 +23,6 @@ namespace Infrastructure.Persistance
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            //modelBuilder.ApplyConfiguration(new CustomerConfiguration());
         }
 
         public async Task<int> SaveChangesAysnc()

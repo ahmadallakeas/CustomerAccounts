@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class AuthenticationUser : IdentityUser<int>
+    public class AuthenticationUser : IdentityUser<string>
     {
     }
 }

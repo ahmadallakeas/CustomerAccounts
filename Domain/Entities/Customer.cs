@@ -10,7 +10,7 @@ namespace Domain.Entities
 {
     public class Customer
     {
-        public int CustomerId { get; set; }
+        public string CustomerId { get; set; }
         [Required(ErrorMessage = "This field FirstName is required")]
         public string FirstName { get; set; }
         [Required(ErrorMessage = "This field Surname is required")]
@@ -19,7 +19,7 @@ namespace Domain.Entities
         public AuthenticationUser? User { get; set; }
         [ForeignKey(nameof(AuthenticationUser))]
         [Required(ErrorMessage = "This field AuthenticationUserId is required")]
-        public int AuthenticationUserId { get; set; }
+        public string AuthenticationUserId { get; set; }
         public ICollection<Account>? Accounts { get; set; }
     }
 }

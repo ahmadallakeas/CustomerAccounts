@@ -54,7 +54,7 @@ namespace Infrastructure.Services
             if (user1 is null)
             {
                 Log.Error($"Customer with email {email} does not exist");
-                throw new CustomerNotFoundException(email);
+                throw new CustomerNotFoundException("email", email);
             }
             _user = user1;
             return user1;
