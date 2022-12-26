@@ -43,17 +43,18 @@ namespace Infrastructure.Services
                 Log.Error($"Customer with id {id} does not exist");
                 throw new CustomerNotFoundException("id", id);
             }
+
             var customerToReturn = _mapper.Map<CustomerDto>(customer);
             return customerToReturn;
         }
 
-        public async Task<CustomerDto> GetCustomerByLoginAsync(string id, bool trackChanges)
+        public async Task<CustomerDto> GetCustomerByLoginAsync(string email, bool trackChanges)
         {
-            var customer = await _repository.Customer.GetCustomerByLoginAsync(id, trackChanges);
+            var customer = await _repository.Customer.GetCustomerByLoginAsync(email, trackChanges);
             if (customer is null)
             {
-                Log.Error($"Customer with id {id} does not exist");
-                throw new CustomerNotFoundException("id", id);
+                Log.Error($"Customer with email {email} does not exist");
+                throw new CustomerNotFoundException("email", email);
             }
             var customerToReturn = _mapper.Map<CustomerDto>(customer);
             return customerToReturn;

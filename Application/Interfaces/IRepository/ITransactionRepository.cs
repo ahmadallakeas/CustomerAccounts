@@ -10,8 +10,7 @@ namespace Application.Interfaces.IRepository
     public interface ITransactionRepository
     {
         Task<Transaction> GetTransactionAsync(string id, bool trackChanges);
-        Task<IEnumerable<Transaction>> GetTransactionsForCustomerAsync(string customerId, bool trackChanges);
-        void CreateTransaction(Transaction transaction);
+        Task<IEnumerable<Transaction>> GetTransactionsForCustomerAsync(string accountId, bool trackChanges);
         void MakeTransaction(string accountId, Transaction transaction);
     }
 }

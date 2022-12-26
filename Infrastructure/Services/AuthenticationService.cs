@@ -1,9 +1,11 @@
 ﻿using Application.Configurations;
 using Application.DataTransfer;
 using Application.Exceptions;
+using Application.Interfaces.IRepository;
 using Application.Interfaces.IServices;
 using AutoMapper;
 using Domain.Entities;
+using EntityFramework.Exceptions.Common;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -20,45 +22,64 @@ namespace Infrastructure.Services
 {
     internal sealed class AuthenticationService : IAuthenticationService
     {
-        private readonly UserManager<AuthenticationUser> _manager;
-        private AuthenticationUser? _user;
+        private readonly IRepositoryManager _repository;
         private IMapper _mapper;
         private readonly JwtConfiguration _jwtConfiguration;
+        private Customer? customer;
 
-        public AuthenticationService(UserManager<AuthenticationUser> manager, IMapper mapper, IOptions<JwtConfiguration> configuration)
+        public AuthenticationService(IMapper mapper, IOptions<JwtConfiguration> configuration, IRepositoryManager repository)
         {
-            _manager = manager;
+
             _mapper = mapper;
             _jwtConfiguration = configuration.Value;
+            _repository = repository;
         }
 
 
-        public async Task<IdentityResult> RegisterCustomerAsync(CustomerForRegistrationDto customerForRegistration)
+        public async Task<CustomerDto> RegisterCustomerAsync(CustomerForRegistrationDto customerForRegistration)
         {
-            var userToCreate = new AuthenticationUser();
-            userToCreate.Email = customerForRegistration.Email;
-            userToCreate.UserName = customerForRegistration.Email;
-            var result = await _manager.CreateAsync(userToCreate, customerForRegistration.Password);
-            return result;
+            customer = _mapper.Map<Customer>(customerForRegistration);
+            _repository.Customer.CreateCustomer(customer, "a");
+            try
+            {
+                var result = await _repository.SaveAsync();
+                var c = await _repository.Customer.GetCustomerByLoginAsync(customerForRegistration.Email, false);
+                var customerToReturn = _mapper.Map<CustomerDto>(c);
+                return customerToReturn;
+            }
+            catch (UniqueConstraintException e)
+            {
+                throw new CreateCustomerBadRequestException($"Email {customerForRegistration.Email} already exists");
+            }
+            catch (Exception e)
+            {
+                throw new CreateCustomerBadRequestException(e.Message);
+            }
         }
 
         public async Task<bool> ValidateCustomerAsync(CustomerForLoginDto customerForLogin)
         {
-            _user = await GetAuthenticationUserAsync(customerForLogin.Email);
-            return (_user != null && await _manager.CheckPasswordAsync(_user, customerForLogin.Password));
+            var customer1 = await _repository.Customer.GetCustomerByLoginAsync(customerForLogin.Email, false);
+            if (customer1 is null)
+            {
+                Log.Error($"Customer with email {customerForLogin.Email} does not exist");
+                throw new CustomerNotFoundException("email", customerForLogin.Email);
+            }
+            customer = customer1;
+            return (customer != null && await _repository.Customer.CheckPasswordAsync(customerForLogin.Email, customerForLogin.Password, false) != null);
         }
 
-        public async Task<AuthenticationUser> GetAuthenticationUserAsync(string email)
+        public async Task<CustomerDto> GetCustomerByEmail(string email)
         {
-            var user1 = await _manager.FindByEmailAsync(email);
-            if (user1 is null)
+            var customer1 = await _repository.Customer.GetCustomerByLoginAsync(email, false);
+            if (customer1 is null)
             {
                 Log.Error($"Customer with email {email} does not exist");
                 throw new CustomerNotFoundException("email", email);
             }
-            _user = user1;
-            return user1;
+            return _mapper.Map<CustomerDto>(customer1);
         }
+
         public async Task<string> CreateTokenAsync()
         {
             var signingCredentials = GetSigningCredentials();
@@ -89,9 +110,12 @@ namespace Infrastructure.Services
         }
         private async Task<List<Claim>> GetClaims()
         {
+
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, _user.UserName)
+                new Claim(ClaimTypes.Name,customer.FirstName+" "+customer.Surname),
+                new Claim(ClaimTypes.Email,customer.Email)
+
             };
             return claims;
         }

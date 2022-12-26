@@ -1,7 +1,10 @@
 ﻿using Application.DataTransfer;
 using Application.DataTransfer.Response;
+using Application.Interfaces.IRepository;
 using Application.Interfaces.IServices;
+using AutoMapper;
 using Azure;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
 
@@ -15,11 +18,14 @@ namespace Presentation.Controllers
     {
         private readonly IServiceManager _serviceManager;
         private readonly ILogger _logger;
+        private readonly IMapper _mapper;
 
-        public AuthenticationController(IServiceManager serviceManager, ILogger<AuthenticationController> logger)
+
+        public AuthenticationController(IServiceManager serviceManager, ILogger<AuthenticationController> logger, IMapper mapper)
         {
             _serviceManager = serviceManager;
             _logger = logger;
+            _mapper = mapper;
         }
         /// <summary>
         /// Creates a customer.
@@ -46,16 +52,7 @@ namespace Presentation.Controllers
         public async Task<IActionResult> CreateCustomerAccount([FromBody] CustomerForRegistrationDto customerForRegistration)
         {
             var result = await _serviceManager.AuthenticationService.RegisterCustomerAsync(customerForRegistration);
-            if (!result.Succeeded)
-            {
-                foreach (var error in result.Errors.Where(s => s.Code != "DuplicateUserName"))
-                {
-                    ModelState.TryAddModelError(error.Code, error.Description);
-                }
-                return BadRequest(ModelState);
-            }
-            var user = await _serviceManager.AuthenticationService.GetAuthenticationUserAsync(customerForRegistration.Email);
-            var customer = await _serviceManager.CustomerService.CreateCustomerAsync(customerForRegistration, user.Id, trackChanges: false);
+            var customer = await _serviceManager.AuthenticationService.GetCustomerByEmail(customerForRegistration.Email);
             LoginResponse response = new LoginResponse()
             {
                 CustomerId = customer.CustomerId,
@@ -65,8 +62,8 @@ namespace Presentation.Controllers
                 Token = await _serviceManager.AuthenticationService.CreateTokenAsync(),
                 ExpiresIn = 60 * 60
             };
-            return CreatedAtAction(nameof(Authenticate), new { customerForLogin = new { Email = customerForRegistration.Email, Password = customerForRegistration.Password } }, response);
-
+            var x = CreatedAtAction(nameof(Authenticate), new { customerForLogin = new { Email = customerForRegistration.Email, Password = customerForRegistration.Password } }, response);
+            return x;
         }
         /// <summary>
         /// Log a customer in
@@ -96,8 +93,7 @@ namespace Presentation.Controllers
             {
                 return Unauthorized();
             }
-            var user = await _serviceManager.AuthenticationService.GetAuthenticationUserAsync(customerForLogin.Email);
-            var customer = await _serviceManager.CustomerService.GetCustomerByLoginAsync(user.Id, trackChanges: false);
+            var customer = await _serviceManager.CustomerService.GetCustomerByLoginAsync(customerForLogin.Email, trackChanges: false);
             LoginResponse response = new LoginResponse()
             {
                 CustomerId = customer.CustomerId,

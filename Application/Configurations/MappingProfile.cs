@@ -23,14 +23,13 @@ namespace Application.Configurations
                 opt.MapFrom(c => c.Customer.Surname));
             CreateMap<CustomerForRegistrationDto, Customer>()
                 .ForMember(c => c.Surname, opt => opt.MapFrom(cg => cg.LastName));
-            CreateMap<IdentityUser<int>, AuthenticationUser>();
             CreateMap<Customer, CustomerDto>()
                 .ForMember(cd => cd.LastName, opt =>
-                opt.MapFrom(c => c.Surname))
-                .ForMember(cd => cd.AuthenticationUserId, opt =>
-                opt.MapFrom(c => c.User.Id))
-                .ForMember(cd => cd.Email, opt => opt.MapFrom(c => c.User.Email));
-         
+                opt.MapFrom(c => c.Surname));
+            CreateMap<CustomerDto, Customer>()
+    .ForMember(cd => cd.Surname, opt =>
+    opt.MapFrom(c => c.LastName));
+
         }
     }
 }

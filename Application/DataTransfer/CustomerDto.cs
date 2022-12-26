@@ -10,7 +10,6 @@ namespace Application.DataTransfer
     public record CustomerDto
     {
         public string CustomerId { get; set; }
-        public string AuthenticationUserId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
