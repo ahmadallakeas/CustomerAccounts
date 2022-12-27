@@ -20,11 +20,11 @@ namespace Infrastructure.Services
         private readonly Lazy<IAuthenticationService> _authenticationService;
         private readonly Lazy<ICustomerService> _customerService;
 
-        public ServiceManager(IRepositoryManager repositoryManager, IMapper mapper, UserManager<AuthenticationUser> userManager, IOptions<JwtConfiguration> configuration)
+        public ServiceManager(IRepositoryManager repositoryManager, IMapper mapper, IOptions<JwtConfiguration> configuration)
         {
             _accountService = new Lazy<IAccountService>(() => new AccountService(repositoryManager, mapper));
             _transactionService = new Lazy<ITransactionService>(() => new TransactionService(repositoryManager, mapper));
-            _authenticationService = new Lazy<IAuthenticationService>(() => new AuthenticationService(userManager, mapper, configuration));
+            _authenticationService = new Lazy<IAuthenticationService>(() => new AuthenticationService(mapper, configuration, repositoryManager));
             _customerService = new Lazy<ICustomerService>(() => new CustomerService(repositoryManager, mapper));
         }
         public IAccountService AccountService => _accountService.Value;

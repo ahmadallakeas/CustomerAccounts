@@ -1,18 +1,20 @@
 ﻿using Application.Interfaces;
 using Domain.Entities;
-using Infrastructure.Persistance.Configurations;
+using EntityFramework.Exceptions.SqlServer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Infrastructure.Persistance
 {
-    public class ApplicationDbContext : IdentityDbContext<AuthenticationUser, IdentityRole<int>, int>, IApplicationDbContext
+    public class ApplicationDbContext : DbContext, IApplicationDbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }
@@ -23,7 +25,13 @@ namespace Infrastructure.Persistance
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            //modelBuilder.ApplyConfiguration(new CustomerConfiguration());
+            modelBuilder.Entity<Customer>()
+           .HasAlternateKey(c => c.Email);
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseExceptionProcessor();
         }
 
         public async Task<int> SaveChangesAysnc()

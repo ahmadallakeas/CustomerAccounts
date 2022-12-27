@@ -11,6 +11,7 @@ namespace Application.Interfaces.IRepository
         IAccountRepository Account { get; }
         ICustomerRepository Customer { get; }
         ITransactionRepository Transaction { get; }
-        Task SaveAsync();
+        Task<int> SaveAsync();
     }
+
 }

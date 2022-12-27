@@ -51,7 +51,7 @@ namespace Application.formatters
         private static void FormatCustomerCsv(StringBuilder buffer, CustomerDto customer)
         {
             //Didn't format the accounts and transactions into csv because I dont know the proper structure of csv nested arrays.
-            buffer.AppendLine($"{customer.CustomerId},{customer.AuthenticationUserId},\"{customer.FirstName} {customer.LastName},\"{customer.Email}\"");
+            buffer.AppendLine($"{customer.CustomerId},\"{customer.FirstName} {customer.LastName},\"{customer.Email}\"");
         }
 
     }

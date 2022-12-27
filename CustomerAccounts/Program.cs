@@ -1,5 +1,10 @@
 using Application;
+using Application.Interfaces.IRepository;
 using Infrastructure;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using MongoInfrastructure;
+using MongoInfrastructure.Repository;
 using Presentation;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,8 +13,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddPresenationServices();
-builder.Services.AddInfrastrcutureServices(builder.Configuration);
-builder.Services.AddApplicationServices();
+var database = builder.Configuration.GetSection("Database").Value;
+if (database == "Mongo")
+{
+    builder.Services.AddMongoInfrastructureServices(builder.Configuration);
+}
+else
+{
+    builder.Services.AddInfrastrcutureServices(builder.Configuration);
+}
+builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddControllers(options =>
 {
     options.SuppressAsyncSuffixInActionNames = false

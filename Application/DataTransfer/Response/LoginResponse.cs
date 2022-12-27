@@ -12,7 +12,7 @@ namespace Application.DataTransfer.Response
         {
         }
 
-        public LoginResponse(string firstName, string lastName, string email, string token, int expiresIn, int customerId)
+        public LoginResponse(string firstName, string lastName, string email, string token, int expiresIn, string customerId)
         {
             FirstName = firstName;
             LastName = lastName;
@@ -21,7 +21,7 @@ namespace Application.DataTransfer.Response
             ExpiresIn = expiresIn;
             CustomerId = customerId;
         }
-        public int CustomerId { get; set; }
+        public string CustomerId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }

@@ -1,46 +1,43 @@
 ﻿using Application.Configurations;
 using Application.Interfaces.IRepository;
 using Application.Interfaces.IServices;
-using Domain.Entities;
-using Infrastructure.Persistance;
-using Infrastructure.Persistance.Repository;
 using Infrastructure.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
+using MongoDB.Driver;
+using MongoInfrastructure.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure
+namespace MongoInfrastructure
 {
     public static class ConfigureServices
     {
-        public static void AddInfrastrcutureServices(this IServiceCollection services, IConfiguration configuration)
+        public static void AddMongoInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            ConfigureDbContext(services, configuration);
+            ConfigureMongoContext(services);
             ConfigureRepositoryManager(services);
             ConfigureServiceManager(services);
-
+            AddMongoContextConfiguration(services, configuration);
         }
-        public static void ConfigureDbContext(IServiceCollection services, IConfiguration configuration)
+        public static void AddMongoContextConfiguration(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("default")));
+            services.Configure<MongoDbConfiguration>(configuration.GetSection("CustomersAccountsDatabase"));
+        }
+        public static void ConfigureMongoContext(IServiceCollection services)
+        {
+            services.AddScoped<IMongoContext, MongoContext>();
         }
         public static void ConfigureRepositoryManager(IServiceCollection services)
         {
-            services.AddScoped<IRepositoryManager, RepositoryManager>();
+            services.AddScoped<IRepositoryManager, MongoRepositoryManager>();
         }
         public static void ConfigureServiceManager(IServiceCollection services)
         {
             services.AddScoped<IServiceManager, ServiceManager>();
         }
-
-
     }
 }

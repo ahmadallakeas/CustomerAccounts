@@ -24,7 +24,7 @@ namespace Infrastructure.Services
             _mapper = mapper;
         }
 
-        public async Task<CustomerDto> CreateCustomerAsync(CustomerForRegistrationDto customerForRegistration, int userId, bool trackChanges)
+        public async Task<CustomerDto> CreateCustomerAsync(CustomerForRegistrationDto customerForRegistration, string userId, bool trackChanges)
         {
             var customer = _mapper.Map<Customer>(customerForRegistration);
             _repository.Customer.CreateCustomer(customer, userId);
@@ -35,25 +35,26 @@ namespace Infrastructure.Services
             return customerToReturn;
         }
 
-        public async Task<CustomerDto> GetCustomerAsync(int id, bool trackChanges)
+        public async Task<CustomerDto> GetCustomerAsync(string id, bool trackChanges)
         {
             var customer = await _repository.Customer.GetCustomerAsync(id, trackChanges);
             if (customer is null)
             {
                 Log.Error($"Customer with id {id} does not exist");
-                throw new CustomerNotFoundException(id);
+                throw new CustomerNotFoundException("id", id);
             }
+
             var customerToReturn = _mapper.Map<CustomerDto>(customer);
             return customerToReturn;
         }
 
-        public async Task<CustomerDto> GetCustomerByLoginAsync(int id, bool trackChanges)
+        public async Task<CustomerDto> GetCustomerByLoginAsync(string email, bool trackChanges)
         {
-            var customer = await _repository.Customer.GetCustomerByLoginAsync(id, trackChanges);
+            var customer = await _repository.Customer.GetCustomerByLoginAsync(email, trackChanges);
             if (customer is null)
             {
-                Log.Error($"Customer with id {id} does not exist");
-                throw new CustomerNotFoundException(id);
+                Log.Error($"Customer with email {email} does not exist");
+                throw new CustomerNotFoundException("email", email);
             }
             var customerToReturn = _mapper.Map<CustomerDto>(customer);
             return customerToReturn;

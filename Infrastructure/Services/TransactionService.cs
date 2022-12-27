@@ -20,12 +20,12 @@ namespace Infrastructure.Services
             _mapper = mapper;
         }
 
-        public async Task<Transaction> GetTransactionAsync(int id, bool trackChanges)
+        public async Task<Transaction> GetTransactionAsync(string id, bool trackChanges)
         {
             var transaction = await _repository.Transaction.GetTransactionAsync(id, trackChanges);
             return transaction;
         }
-        public async Task SendTransactionForAccount(int accountId, bool trackChanges)
+        public async Task SendTransactionForAccount(string accountId, bool trackChanges)
         {
             Transaction transaction = new Transaction
             {

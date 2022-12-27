@@ -16,26 +16,24 @@ namespace Infrastructure.Persistance.Repository
         public TransactionRepository(ApplicationDbContext dbcontext) : base(dbcontext)
         {
         }
-        public void MakeTransaction(int accountId,Transaction transaction)
+        public void MakeTransaction(string accountId, Transaction transaction)
         {
-            
+
             transaction.AccountId = accountId;
-            CreateTransaction(transaction);
-        }
-        public void CreateTransaction(Transaction transaction)
-        {
+            transaction.TransactionId = MongoDB.Bson.ObjectId.GenerateNewId().ToString();
             Create(transaction);
         }
 
-        public async Task<Transaction> GetTransactionAsync(int id, bool trackChanges)
+
+        public async Task<Transaction> GetTransactionAsync(string id, bool trackChanges)
         {
             return await FindByCondition(t => t.TransactionId == id, trackChanges)
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Transaction>> GetTransactionsForCustomerAsync(int customerId, bool trackChanges)
+        public async Task<IEnumerable<Transaction>> GetTransactionsForCustomerAsync(string accountId, bool trackChanges)
         {
-            return await FindByCondition(t => t.AccountId == customerId, trackChanges)
+            return await FindByCondition(t => t.AccountId == accountId, trackChanges)
                 .OrderBy(t => t.TransactionName)
                 .ToListAsync();
         }

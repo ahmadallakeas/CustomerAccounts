@@ -15,25 +15,27 @@ namespace Infrastructure.Persistance.Repository
         {
         }
 
-        public void CreateCustomer(Customer customer, int userId)
+        public void CreateCustomer(Customer customer, string userId)
         {
-            customer.AuthenticationUserId = userId;
+            customer.CustomerId = MongoDB.Bson.ObjectId.GenerateNewId().ToString();
             Create(customer);
         }
 
-        public async Task<Customer> GetCustomerAsync(int customerId, bool trackChanges)
+        public async Task<Customer> GetCustomerAsync(string customerId, bool trackChanges)
         {
             return await FindByCondition(c => c.CustomerId == customerId, trackChanges)
-                .Include(c => c.User)
                 .Include(c => c.Accounts)
                 .SingleOrDefaultAsync();
         }
-        public async Task<Customer> GetCustomerByLoginAsync(int id, bool trackChanges)
+        public async Task<Customer> GetCustomerByLoginAsync(string email, bool trackChanges)
         {
-            return await FindByCondition(c => c.AuthenticationUserId == id, trackChanges)
-              .Include(c => c.User)
+            return await FindByCondition(c => c.Email == email, trackChanges)
               .Include(c => c.Accounts)
               .SingleOrDefaultAsync();
+        }
+        public async Task<Customer> CheckPasswordAsync(string email, string password, bool trackChanges)
+        {
+            return await FindByCondition(c => c.Email == email && c.Password == password, trackChanges).SingleOrDefaultAsync();
         }
     }
 }

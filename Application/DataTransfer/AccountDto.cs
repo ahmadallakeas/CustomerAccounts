@@ -11,8 +11,8 @@ namespace Application.DataTransfer
 {
     public record AccountDto
     {
-        public int AccountId { get; set; }
-        public int CustomerId { get; set; }
+        public string AccountId { get; set; }
+        public string CustomerId { get; set; }
         public double Balance { get; set; }
         public ICollection<TransactionDto>? Transactions { get; set; }
     }

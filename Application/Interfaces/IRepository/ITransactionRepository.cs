@@ -9,9 +9,8 @@ namespace Application.Interfaces.IRepository
 {
     public interface ITransactionRepository
     {
-        Task<Transaction> GetTransactionAsync(int id, bool trackChanges);
-        Task<IEnumerable<Transaction>> GetTransactionsForCustomerAsync(int customerId, bool trackChanges);
-        void CreateTransaction(Transaction transaction);
-        void MakeTransaction(int accountId, Transaction transaction);
+        Task<Transaction> GetTransactionAsync(string id, bool trackChanges);
+        Task<IEnumerable<Transaction>> GetTransactionsForCustomerAsync(string accountId, bool trackChanges);
+        void MakeTransaction(string accountId, Transaction transaction);
     }
 }

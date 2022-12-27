@@ -24,13 +24,13 @@ namespace Infrastructure.Services
             _mapper = mapper;
         }
 
-        public async Task<AccountDto> CreateAccountForCustomer(int customerId, double initialCredits, bool trackChanges)
+        public async Task<AccountDto> CreateAccountForCustomer(string customerId, double initialCredits, bool trackChanges)
         {
             var customer = await _repository.Customer.GetCustomerAsync(customerId, trackChanges);
             if (customer is null)
             {
                 Log.Error($"Customer with id {customerId} does not exist");
-                throw new CustomerNotFoundException(customerId);
+                throw new CustomerNotFoundException("id", customerId);
 
             }
             if (initialCredits < 0.0)
@@ -51,7 +51,7 @@ namespace Infrastructure.Services
             return accountToReturn;
         }
 
-        public async Task<AccountDto> GetAccountAsync(int id, bool trackChanges)
+        public async Task<AccountDto> GetAccountAsync(string id, bool trackChanges)
         {
             var account = await _repository.Account.GetAccountAsync(id, trackChanges);
             if (account is null)
@@ -63,7 +63,7 @@ namespace Infrastructure.Services
             return accountToReturn;
         }
 
-        public async Task<AccountDto> GetAccountForCustomerAsync(int customerId, int accountId, bool trackChanges)
+        public async Task<AccountDto> GetAccountForCustomerAsync(string customerId, string accountId, bool trackChanges)
         {
             var account = await _repository.Account.GetAccountByCustomerIdAsync(customerId, accountId, trackChanges);
             if (account is null)
@@ -75,20 +75,20 @@ namespace Infrastructure.Services
             return accountToReturn;
         }
 
-        public async Task<IEnumerable<AccountDto>> GetAccountsAsync(int customerId, bool trackChanges)
+        public async Task<IEnumerable<AccountDto>> GetAccountsAsync(string customerId, bool trackChanges)
         {
             var customer = await _repository.Customer.GetCustomerAsync(customerId, trackChanges);
             if (customer is null)
             {
                 Log.Error($"Customer with id {customerId} does not exist");
-                throw new CustomerNotFoundException(customerId);
+                throw new CustomerNotFoundException("id", customerId);
             }
             var accounts = await _repository.Account.GetAccountsAsync(customerId, trackChanges);
             var accountsDto = _mapper.Map<IEnumerable<AccountDto>>(accounts);
             return accountsDto;
         }
 
-        public async Task<UserInfoDto> GetUserInfoAsync(int customerId, int accountId, bool trackChanges)
+        public async Task<UserInfoDto> GetUserInfoAsync(string customerId, string accountId, bool trackChanges)
         {
             var account = await _repository.Account.GetAccountByCustomerIdAsync(customerId, accountId, trackChanges);
             if (account is null)

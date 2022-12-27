@@ -14,6 +14,8 @@ namespace Application.DataTransfer
         public string Email { get; set; }
         [Required(ErrorMessage = "The field Password is required")]
         [DataType(DataType.Password)]
+        [StringLength(6, ErrorMessage = "Minimum length is 6")]
+
         public string Password { get; set; }
     }
 }

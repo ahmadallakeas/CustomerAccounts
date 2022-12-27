@@ -15,20 +15,21 @@ namespace Infrastructure.Persistance.Repository
         {
         }
 
-        public void CreateAccount(Account account, int customerId)
+        public void CreateAccount(Account account, string customerId)
         {
             account.CustomerId = customerId;
+            account.AccountId = MongoDB.Bson.ObjectId.GenerateNewId().ToString();
             Create(account);
         }
 
-        public async Task<Account> GetAccountAsync(int id, bool trackChanges)
+        public async Task<Account> GetAccountAsync(string id, bool trackChanges)
         {
             return await FindByCondition(u => u.AccountId == id, trackChanges)
                 .Include(c => c.Customer)
                 .Include(t => t.Transactions)
                 .FirstOrDefaultAsync();
         }
-        public async Task<Account> GetAccountByCustomerIdAsync(int customerId, int accountId, bool trackChanges)
+        public async Task<Account> GetAccountByCustomerIdAsync(string customerId, string accountId, bool trackChanges)
         {
             return await FindByCondition(u => u.CustomerId == customerId && u.AccountId == accountId, trackChanges)
              .Include(c => c.Customer)
@@ -36,7 +37,7 @@ namespace Infrastructure.Persistance.Repository
              .FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Account>> GetAccountsAsync(int customerId, bool trackChanges)
+        public async Task<IEnumerable<Account>> GetAccountsAsync(string customerId, bool trackChanges)
         {
             return await FindByCondition(a => a.CustomerId == customerId, trackChanges)
             .Include(c => c.Customer)

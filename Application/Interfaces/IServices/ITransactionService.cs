@@ -9,7 +9,7 @@ namespace Application.Interfaces.IServices
 {
     public interface ITransactionService
     {
-        Task<Transaction> GetTransactionAsync(int id, bool trackChanges);
-        Task SendTransactionForAccount(int accountId, bool trackChanges);
+        Task<Transaction> GetTransactionAsync(string id, bool trackChanges);
+        Task SendTransactionForAccount(string accountId, bool trackChanges);
     }
 }

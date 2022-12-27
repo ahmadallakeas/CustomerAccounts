@@ -11,9 +11,10 @@ namespace Application.Interfaces.IServices
 {
     public interface IAuthenticationService
     {
-        Task<IdentityResult> RegisterCustomerAsync(CustomerForRegistrationDto customerForRegistration);
+        Task<CustomerDto> RegisterCustomerAsync(CustomerForRegistrationDto customerForRegistration);
         Task<bool> ValidateCustomerAsync(CustomerForLoginDto customerForLogin);
         Task<string> CreateTokenAsync();
-        Task<AuthenticationUser> GetAuthenticationUserAsync(string email);
+        Task<CustomerDto> GetCustomerByEmail(string email);
+
     }
 }
