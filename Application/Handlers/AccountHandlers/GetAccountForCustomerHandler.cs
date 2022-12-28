@@ -1,5 +1,6 @@
 ﻿using Application.DataTransfer;
 using Application.Exceptions;
+using Application.Interfaces.IHandler;
 using Application.Interfaces.IRepository;
 using Application.Queries.AccountQueries;
 using AutoMapper;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Application.Handlers.AccountHandlers
 {
-    internal class GetAccountForCustomerHandler : IRequestHandler<GetAccountForCustomerQuery, AccountDto>
+    internal class GetAccountForCustomerHandler : IQueryHandler<GetAccountForCustomerQuery, AccountDto>
     {
         private readonly IRepositoryManager _repository;
         private readonly IMapper _mapper;

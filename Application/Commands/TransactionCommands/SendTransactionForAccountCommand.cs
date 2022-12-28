@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Application.Interfaces.IRequest;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,6 @@ using System.Threading.Tasks;
 
 namespace Application.Commands.TransactionCommands
 {
-    public sealed record SendTransactionForAccountCommand(string accountId, bool trackChanges) : IRequest;
+    public sealed record SendTransactionForAccountCommand(string accountId, bool trackChanges) : ICommand<Unit>;
 
 }

@@ -1,18 +1,14 @@
 ﻿using Application.Commands.TransactionCommands;
+using Application.Interfaces.IHandler;
 using Application.Interfaces.IRepository;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
-using Microsoft.Identity.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Application.Handlers.TransactionHandler
 {
-    internal class SendTransactionForAccountHandler : IRequestHandler<SendTransactionForAccountCommand>
+    internal class SendTransactionForAccountHandler : ICommandHandler<SendTransactionForAccountCommand, Unit>
     {
         private readonly IRepositoryManager _repository;
         private readonly IMapper _mapper;

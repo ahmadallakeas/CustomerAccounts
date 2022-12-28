@@ -1,6 +1,7 @@
 ﻿using Application.Commands.AccountCommands;
 using Application.DataTransfer;
 using Application.Exceptions;
+using Application.Interfaces.IHandler;
 using Application.Interfaces.IRepository;
 using AutoMapper;
 using Domain.Entities;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Application.Handlers.AccountHandlers
 {
-    internal sealed class CreateAccountForCustomerHandler : IRequestHandler<CreateAccountForCustomerCommand, AccountDto>
+    internal sealed class CreateAccountForCustomerHandler : ICommandHandler<CreateAccountForCustomerCommand, AccountDto>
     {
         private readonly IRepositoryManager _repository;
         private readonly IMapper _mapper;

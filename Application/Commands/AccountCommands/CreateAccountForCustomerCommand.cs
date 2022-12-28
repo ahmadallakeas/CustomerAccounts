@@ -1,4 +1,5 @@
 ﻿using Application.DataTransfer;
+using Application.Interfaces.IRequest;
 using Domain.Entities;
 using MediatR;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Application.Commands.AccountCommands
 {
-    public sealed record CreateAccountForCustomerCommand(string customerId, double initialCredits, bool trackChanges) : IRequest<AccountDto>;
+    public sealed record CreateAccountForCustomerCommand(string customerId, double initialCredits, bool trackChanges) : ICommand<AccountDto>;
 
 
 }

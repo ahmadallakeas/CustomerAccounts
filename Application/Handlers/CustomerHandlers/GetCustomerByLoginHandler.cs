@@ -1,5 +1,6 @@
 ﻿using Application.DataTransfer;
 using Application.Exceptions;
+using Application.Interfaces.IHandler;
 using Application.Interfaces.IRepository;
 using Application.Queries.CustomerQueries;
 using AutoMapper;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Application.Handlers.CustomerHandlers
 {
-    internal sealed class GetCustomerByLoginHandler : IRequestHandler<GetCustomerByLoginCommand, CustomerDto>
+    internal sealed class GetCustomerByLoginHandler : IQueryHandler<GetCustomerByLoginCommand, CustomerDto>
     {
         private readonly IRepositoryManager _repository;
         private IMapper _mapper;

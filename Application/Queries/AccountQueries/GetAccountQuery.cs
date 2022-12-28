@@ -1,4 +1,5 @@
 ﻿using Application.DataTransfer;
+using Application.Interfaces.IRequest;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,5 +9,5 @@ using System.Threading.Tasks;
 
 namespace Application.Queries.AccountQueries
 {
-    public sealed record GetAccountQuery(string accountId, bool trackChanges) : IRequest<AccountDto>;
+    public sealed record GetAccountQuery(string accountId, bool trackChanges) : IQuery<AccountDto>;
 }

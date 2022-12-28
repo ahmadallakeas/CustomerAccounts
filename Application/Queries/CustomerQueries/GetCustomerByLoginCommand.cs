@@ -1,4 +1,5 @@
 ﻿using Application.DataTransfer;
+using Application.Interfaces.IRequest;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,6 @@ using System.Threading.Tasks;
 
 namespace Application.Queries.CustomerQueries
 {
-    public sealed record GetCustomerByLoginCommand(string email, bool trackChanges) : IRequest<CustomerDto>;
+    public sealed record GetCustomerByLoginCommand(string email, bool trackChanges) : IQuery<CustomerDto>;
 
 }

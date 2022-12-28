@@ -1,6 +1,7 @@
 ﻿using Application.Commands.AuthenticationCommands;
 using Application.DataTransfer;
 using Application.Exceptions;
+using Application.Interfaces.IHandler;
 using Application.Interfaces.IRepository;
 using AutoMapper;
 using Domain.Entities;
@@ -16,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Application.Handlers.AuthenticationHandlers
 {
-    internal sealed class RegisterCustomerHandler : IRequestHandler<RegisterCustomerCommand, CustomerDto>
+    internal sealed class RegisterCustomerHandler : ICommandHandler<RegisterCustomerCommand, CustomerDto>
     {
         private readonly IRepositoryManager _repository;
         private IMapper _mapper;

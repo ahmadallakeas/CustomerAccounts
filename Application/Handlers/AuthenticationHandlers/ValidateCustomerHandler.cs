@@ -1,6 +1,7 @@
 ﻿
 using Application.Commands.AuthenticationCommands;
 using Application.Exceptions;
+using Application.Interfaces.IHandler;
 using Application.Interfaces.IRepository;
 using Application.Interfaces.IServices;
 using AutoMapper;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Application.Handlers.AuthenticationHandlers
 {
-    internal sealed class ValidateCustomerHandler : IRequestHandler<ValidateCustomerCommand, bool>
+    internal sealed class ValidateCustomerHandler : ICommandHandler<ValidateCustomerCommand, bool>
     {
         private readonly IRepositoryManager _repository;
         private IMapper _mapper;
