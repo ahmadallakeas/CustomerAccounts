@@ -2,6 +2,7 @@
 using Application.ErrorModels;
 using Application.Exceptions;
 using Application.formatters;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
@@ -28,6 +29,7 @@ namespace Application
             ConfigureAutoMapper(services);
             AddJwtConfiguration(services, configuration);
             ConfigureJWT(services, configuration);
+            ConfigureMediatR(services);
         }
         public static void ConfigureCors(this IServiceCollection services)
         {
@@ -116,6 +118,10 @@ namespace Application
         public static void AddJwtConfiguration(IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<JwtConfiguration>(configuration.GetSection("CustomersAccountsJwtSettings"));
+        }
+        public static void ConfigureMediatR(IServiceCollection services)
+        {
+            services.AddMediatR(typeof(AssemblyReference).Assembly);
         }
     }
 }

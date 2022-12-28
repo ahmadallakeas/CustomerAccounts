@@ -13,7 +13,7 @@ namespace Application.Interfaces.IServices
     {
         Task<CustomerDto> RegisterCustomerAsync(CustomerForRegistrationDto customerForRegistration);
         Task<bool> ValidateCustomerAsync(CustomerForLoginDto customerForLogin);
-        Task<string> CreateTokenAsync();
+        Task<string> CreateTokenAsync(string customerId);
         Task<CustomerDto> GetCustomerByEmail(string email);
 
     }

@@ -15,7 +15,7 @@ namespace Infrastructure.Persistance.Repository
         {
         }
 
-        public void CreateCustomer(Customer customer, string userId)
+        public void CreateCustomer(Customer customer)
         {
             customer.CustomerId = MongoDB.Bson.ObjectId.GenerateNewId().ToString();
             Create(customer);

@@ -1,10 +1,13 @@
-﻿using Application.DataTransfer;
+﻿using Application.Commands.AuthenticationCommands;
+using Application.DataTransfer;
 using Application.DataTransfer.Response;
 using Application.Interfaces.IRepository;
 using Application.Interfaces.IServices;
+using Application.Queries.CustomerQueries;
 using AutoMapper;
 using Azure;
 using Domain.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
 
@@ -17,15 +20,14 @@ namespace Presentation.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IServiceManager _serviceManager;
-        private readonly ILogger _logger;
         private readonly IMapper _mapper;
+        private readonly ISender _sender;
 
-
-        public AuthenticationController(IServiceManager serviceManager, ILogger<AuthenticationController> logger, IMapper mapper)
+        public AuthenticationController(IServiceManager serviceManager, IMapper mapper, ISender sender)
         {
             _serviceManager = serviceManager;
-            _logger = logger;
             _mapper = mapper;
+            _sender = sender;
         }
         /// <summary>
         /// Creates a customer.
@@ -51,19 +53,20 @@ namespace Presentation.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> CreateCustomerAccount([FromBody] CustomerForRegistrationDto customerForRegistration)
         {
-            var result = await _serviceManager.AuthenticationService.RegisterCustomerAsync(customerForRegistration);
-            var customer = await _serviceManager.AuthenticationService.GetCustomerByEmail(customerForRegistration.Email);
+            var result = await _sender.Send(new RegisterCustomerCommand(customerForRegistration));
+            var customer = await _sender.Send(new GetCustomerByLoginCommand(customerForRegistration.Email, trackChanges: false));
+
             LoginResponse response = new LoginResponse()
             {
                 CustomerId = customer.CustomerId,
                 Email = customer.Email,
                 FirstName = customer.FirstName,
                 LastName = customer.LastName,
-                Token = await _serviceManager.AuthenticationService.CreateTokenAsync(),
+                Token = await _serviceManager.AuthenticationService.CreateTokenAsync(customer.CustomerId),
                 ExpiresIn = 60 * 60
             };
-            var x = CreatedAtAction(nameof(Authenticate), new { customerForLogin = new { Email = customerForRegistration.Email, Password = customerForRegistration.Password } }, response);
-            return x;
+            return CreatedAtAction(nameof(Authenticate), new { customerForLogin = new { Email = customerForRegistration.Email, Password = customerForRegistration.Password } }, response);
+
         }
         /// <summary>
         /// Log a customer in
@@ -88,19 +91,19 @@ namespace Presentation.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Authenticate([FromBody] CustomerForLoginDto customerForLogin)
         {
-
-            if (!await _serviceManager.AuthenticationService.ValidateCustomerAsync(customerForLogin))
+            var result = await _sender.Send(new ValidateCustomerCommand(customerForLogin));
+            if (!result)
             {
                 return Unauthorized();
             }
-            var customer = await _serviceManager.CustomerService.GetCustomerByLoginAsync(customerForLogin.Email, trackChanges: false);
+            var customer = await _sender.Send(new GetCustomerByLoginCommand(customerForLogin.Email, trackChanges: false));
             LoginResponse response = new LoginResponse()
             {
                 CustomerId = customer.CustomerId,
                 Email = customer.Email,
                 FirstName = customer.FirstName,
                 LastName = customer.LastName,
-                Token = await _serviceManager.AuthenticationService.CreateTokenAsync(),
+                Token = await _serviceManager.AuthenticationService.CreateTokenAsync(customer.CustomerId),
                 ExpiresIn = 60 * 60
             };
             return Ok(response);

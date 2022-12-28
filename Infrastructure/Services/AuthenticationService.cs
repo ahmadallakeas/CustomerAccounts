@@ -24,8 +24,8 @@ namespace Infrastructure.Services
     {
         private readonly IRepositoryManager _repository;
         private IMapper _mapper;
-        private readonly JwtConfiguration _jwtConfiguration;
         private Customer? customer;
+        private readonly JwtConfiguration _jwtConfiguration;
 
         public AuthenticationService(IMapper mapper, IOptions<JwtConfiguration> configuration, IRepositoryManager repository)
         {
@@ -39,7 +39,7 @@ namespace Infrastructure.Services
         public async Task<CustomerDto> RegisterCustomerAsync(CustomerForRegistrationDto customerForRegistration)
         {
             customer = _mapper.Map<Customer>(customerForRegistration);
-            _repository.Customer.CreateCustomer(customer, "a");
+            _repository.Customer.CreateCustomer(customer);
             try
             {
                 var result = await _repository.SaveAsync();
@@ -80,10 +80,11 @@ namespace Infrastructure.Services
             return _mapper.Map<CustomerDto>(customer1);
         }
 
-        public async Task<string> CreateTokenAsync()
+        public async Task<string> CreateTokenAsync(string customerId)
         {
+            var customer1 = await _repository.Customer.GetCustomerAsync(customerId, false);
             var signingCredentials = GetSigningCredentials();
-            var claims = await GetClaims();
+            var claims = await GetClaims(customer1);
             var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
             var accessToken = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
             return accessToken;
@@ -108,13 +109,13 @@ namespace Infrastructure.Services
             var secret = new SymmetricSecurityKey(key);
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
         }
-        private async Task<List<Claim>> GetClaims()
+        private async Task<List<Claim>> GetClaims(Customer c)
         {
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name,customer.FirstName+" "+customer.Surname),
-                new Claim(ClaimTypes.Email,customer.Email)
+                new Claim(ClaimTypes.Name,c.FirstName+" "+c.Surname),
+                new Claim(ClaimTypes.Email,c.Email)
 
             };
             return claims;

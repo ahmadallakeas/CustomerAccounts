@@ -26,7 +26,7 @@ namespace Infrastructure
             ConfigureDbContext(services, configuration);
             ConfigureRepositoryManager(services);
             ConfigureServiceManager(services);
-
+            //services.AddScoped<IAuthService, AuthService>();
         }
         public static void ConfigureDbContext(IServiceCollection services, IConfiguration configuration)
         {

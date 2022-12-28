@@ -24,10 +24,10 @@ namespace Infrastructure.Services
             _mapper = mapper;
         }
 
-        public async Task<CustomerDto> CreateCustomerAsync(CustomerForRegistrationDto customerForRegistration, string userId, bool trackChanges)
+        public async Task<CustomerDto> CreateCustomerAsync(CustomerForRegistrationDto customerForRegistration, bool trackChanges)
         {
             var customer = _mapper.Map<Customer>(customerForRegistration);
-            _repository.Customer.CreateCustomer(customer, userId);
+            _repository.Customer.CreateCustomer(customer);
             await _repository.SaveAsync();
             customer = await _repository.Customer.GetCustomerAsync(customer.CustomerId, trackChanges);
 

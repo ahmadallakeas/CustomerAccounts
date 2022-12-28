@@ -1,8 +1,12 @@
 ﻿using Application.Exceptions;
 using Application.Interfaces.IRepository;
 using Application.Interfaces.IServices;
+using Application.Queries.CustomerQueries;
+using Azure.Core;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace Presentation.Controllers
 {
@@ -13,13 +17,13 @@ namespace Presentation.Controllers
     {
 
         private readonly IServiceManager _serviceManager;
-        private readonly ILogger _logger;
+        private ISender _sender;
 
 
-        public CustomerController(IServiceManager serviceManager, ILogger<CustomerController> logger)
+        public CustomerController(IServiceManager serviceManager, ISender sender)
         {
             _serviceManager = serviceManager;
-            _logger = logger;
+            _sender = sender;
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -28,9 +32,10 @@ namespace Presentation.Controllers
         {
             if (id.Length != 24)
             {
+                Log.Error($"Customer with id {id} already exists");
                 throw new CustomerNotFoundException("id", id);
             }
-            var customer = await _serviceManager.CustomerService.GetCustomerAsync(id, trackChanges: false);
+            var customer = await _sender.Send(new GetCustomerQuery(id, trackChanges: false));
             return Ok(customer);
         }
 

@@ -11,6 +11,6 @@ namespace Application.Interfaces.IServices
     {
         Task<CustomerDto> GetCustomerByLoginAsync(string email, bool trackChanges);
         Task<CustomerDto> GetCustomerAsync(string id, bool trackChanges);
-        Task<CustomerDto> CreateCustomerAsync(CustomerForRegistrationDto customerForRegistration, string userId, bool trackChanges);
+        Task<CustomerDto> CreateCustomerAsync(CustomerForRegistrationDto customerForRegistration, bool trackChanges);
     }
 }
