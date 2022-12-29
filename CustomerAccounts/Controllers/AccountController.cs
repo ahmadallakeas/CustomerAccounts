@@ -85,7 +85,7 @@ namespace Presentation.Controllers
                 Log.Error($"Customer with id {customerId} does not exist");
                 throw new CustomerNotFoundException("id", customerId);
             }
-            var account = await _serviceManager.AccountService.CreateAccountForCustomer(customerId, initialCredits, trackChanges: false);
+            var account = await _sender.Send(new CreateAccountForCustomerCommand(customerId, initialCredits, trackChanges: false));
 
             if (initialCredits > 0)
             {

@@ -1,7 +1,9 @@
-﻿using Application.Configurations;
+﻿using Application.Behaviors;
+using Application.Configurations;
 using Application.ErrorModels;
 using Application.Exceptions;
 using Application.formatters;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -16,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Application
@@ -30,6 +33,8 @@ namespace Application
             AddJwtConfiguration(services, configuration);
             ConfigureJWT(services, configuration);
             ConfigureMediatR(services);
+            ConfigureFluentValidation(services);
+            ConfigureValidationBehavior(services);
         }
         public static void ConfigureCors(this IServiceCollection services)
         {
@@ -73,14 +78,24 @@ namespace Application
                            {
                                NotFoundException => StatusCodes.Status404NotFound,
                                BadRequestException => StatusCodes.Status400BadRequest,
+                               ValidationAppException => StatusCodes.Status422UnprocessableEntity,
                                _ => StatusCodes.Status500InternalServerError
                            };
                            Log.Error($"Something went wrong: {contextFeature.Error}");
-                           await context.Response.WriteAsync(new ErrorDetails()
+                           if (contextFeature.Error is ValidationAppException exception)
                            {
-                               StatusCode = context.Response.StatusCode,
-                               Message = contextFeature.Error.Message,
-                           }.ToString());
+
+                               await context.Response.WriteAsync(JsonSerializer.Serialize(new { exception.Errors }));
+
+                           }
+                           else
+                           {
+                               await context.Response.WriteAsync(new ErrorDetails()
+                               {
+                                   StatusCode = context.Response.StatusCode,
+                                   Message = contextFeature.Error.Message,
+                               }.ToString());
+                           }
                        }
                    }
                     );
@@ -122,6 +137,14 @@ namespace Application
         public static void ConfigureMediatR(IServiceCollection services)
         {
             services.AddMediatR(typeof(AssemblyReference).Assembly);
+        }
+        public static void ConfigureFluentValidation(IServiceCollection services)
+        {
+            services.AddValidatorsFromAssembly(typeof(Application.AssemblyReference).Assembly);
+        }
+        public static void ConfigureValidationBehavior(IServiceCollection services)
+        {
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         }
     }
 }

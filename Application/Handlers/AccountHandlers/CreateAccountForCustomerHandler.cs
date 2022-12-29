@@ -34,11 +34,6 @@ namespace Application.Handlers.AccountHandlers
                 throw new CustomerNotFoundException("id", request.customerId);
 
             }
-            if (request.initialCredits < 0.0)
-            {
-                Log.Error($"Error in input data, initial credit cant be less than 0");
-                throw new CreateAccountBadRequestException(request.initialCredits);
-            }
             Account account = new Account
             {
                 Balance = request.initialCredits,
