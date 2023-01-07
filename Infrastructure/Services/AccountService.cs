@@ -35,7 +35,7 @@ namespace Infrastructure.Services
             }
             if (initialCredits < 0.0)
             {
-                Log.Error($"Error in input data, initial credit less than 0");
+                Log.Error($"Error in input data, initial credit cant be less than 0");
                 throw new CreateAccountBadRequestException(initialCredits);
             }
             Account account = new Account

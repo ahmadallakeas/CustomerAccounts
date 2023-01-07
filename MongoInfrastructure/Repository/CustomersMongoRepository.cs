@@ -29,7 +29,7 @@ namespace MongoInfrastructure.Repository
             return await _customers.Find(filter).FirstOrDefaultAsync();
         }
 
-        public void CreateCustomer(Customer customer, string userId)
+        public void CreateCustomer(Customer customer)
         {
             _customers.InsertOne(customer);
         }

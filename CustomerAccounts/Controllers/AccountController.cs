@@ -1,11 +1,16 @@
-﻿using Application.DataTransfer.RequestParams;
+﻿using Application.Commands.AccountCommands;
+using Application.Commands.TransactionCommands;
+using Application.DataTransfer.RequestParams;
 using Application.Exceptions;
 using Application.Interfaces.IRepository;
 using Application.Interfaces.IServices;
+using Application.Queries.AccountQueries;
 using Domain.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
+using Serilog;
 
 namespace Presentation.Controllers
 {
@@ -16,11 +21,11 @@ namespace Presentation.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IServiceManager _serviceManager;
-        private readonly ILogger _logger;
-        public AccountController(IServiceManager serviceManager, ILogger<AccountController> logger)
+        private readonly ISender _sender;
+        public AccountController(IServiceManager serviceManager, ISender sender)
         {
             _serviceManager = serviceManager;
-            _logger = logger;
+            _sender = sender;
         }
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -29,9 +34,10 @@ namespace Presentation.Controllers
         {
             if (id.Length != 24)
             {
+                Log.Error($"Account with id {id} does not exist");
                 throw new AccountNotFoundException(id);
             }
-            var account = await _serviceManager.AccountService.GetAccountAsync(id, trackChanges: false);
+            var account = await _sender.Send(new GetAccountQuery(id, false));
             return Ok(account);
 
         }
@@ -42,9 +48,10 @@ namespace Presentation.Controllers
         {
             if (customerId.Length != 24)
             {
+                Log.Error($"Customer with id {customerId} does not exist");
                 throw new CustomerNotFoundException("id", customerId);
             }
-            var accounts = await _serviceManager.AccountService.GetAccountsAsync(customerId, trackChanges: false);
+            var accounts = await _sender.Send(new GetAccountsQuery(customerId, false));
             return Ok(accounts);
 
         }
@@ -55,13 +62,15 @@ namespace Presentation.Controllers
         {
             if (customerId.Length != 24)
             {
+                Log.Error($"Customer with id {customerId} does not exist");
                 throw new CustomerNotFoundException("id", customerId);
             }
             if (accountId.Length != 24)
             {
+                Log.Error($"Account with id {accountId} does not exist");
                 throw new AccountNotFoundException(accountId);
             }
-            var info = await _serviceManager.AccountService.GetUserInfoAsync(customerId, accountId, trackChanges: false);
+            var info = await _sender.Send(new GetUserInfoQuery(customerId, accountId, false));
             return Ok(info);
 
         }
@@ -73,15 +82,16 @@ namespace Presentation.Controllers
         {
             if (customerId.Length != 24)
             {
+                Log.Error($"Customer with id {customerId} does not exist");
                 throw new CustomerNotFoundException("id", customerId);
             }
-            var account = await _serviceManager.AccountService.CreateAccountForCustomer(customerId, initialCredits, trackChanges: false);
+            var account = await _sender.Send(new CreateAccountForCustomerCommand(customerId, initialCredits, trackChanges: false));
 
             if (initialCredits > 0)
             {
-                await _serviceManager.TransactionService.SendTransactionForAccount(account.AccountId, trackChanges: false);
+                await _sender.Send(new SendTransactionForAccountCommand(account.AccountId, false));
             }
-            account = await _serviceManager.AccountService.GetAccountForCustomerAsync(customerId, account.AccountId, trackChanges: false);
+            account = await _sender.Send(new GetAccountForCustomerQuery(customerId, account.AccountId, false));
             return Ok(account);
 
         }
