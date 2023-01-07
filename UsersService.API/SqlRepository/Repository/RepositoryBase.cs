@@ -32,6 +32,7 @@ namespace SqlRepository.Repository
         {
             return !trackChanges ? _dbContext.Set<T>().Where(expression).AsNoTracking() : _dbContext.Set<T>().Where(expression);
         }
+        public void Update(T entity) => _dbContext.Set<T>().Update(entity);
 
     }
 }

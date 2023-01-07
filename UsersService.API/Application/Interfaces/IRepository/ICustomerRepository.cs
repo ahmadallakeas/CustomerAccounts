@@ -13,5 +13,6 @@ namespace Application.Interfaces.IRepository
         Task<Customer> GetCustomerByLoginAsync(string email, bool trackChanges);
         void CreateCustomer(Customer customer);
         Task<Customer> CheckPasswordAsync(string email, string password, bool trackChanges);
+        void UpdateCustomerTotal(Customer customer);
     }
 }

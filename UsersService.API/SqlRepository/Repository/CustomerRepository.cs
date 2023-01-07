@@ -35,5 +35,10 @@ namespace SqlRepository.Repository
         {
             return await FindByCondition(c => c.Email == email && c.Password == password, trackChanges).SingleOrDefaultAsync();
         }
+
+        public void UpdateCustomerTotal(Customer customer)
+        {
+            Update(customer);
+        }
     }
 }

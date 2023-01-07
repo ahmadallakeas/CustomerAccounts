@@ -40,9 +40,10 @@ namespace Application.Handlers.TransactionHandler
             account.Balance += request.balance;
             _repository.Account.UpdateAccount(account);
             await _repository.SaveAsync();
-            await _publishEndpoint.Publish<TotalChanged>(new {
-                CustomerId=account.CustomerId,
-                NewTotal=account.Balance
+            await _publishEndpoint.Publish<TotalChanged>(new
+            {
+                CustomerId = account.CustomerId,
+                NewBalance = request.balance
             });
             return await Task.FromResult(Unit.Value);
         }

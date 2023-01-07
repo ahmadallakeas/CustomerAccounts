@@ -6,7 +6,9 @@ using Application.Interfaces.IRepository;
 using AutoMapper;
 using Domain.Entities;
 using EntityFramework.Exceptions.Common;
+using MassTransit;
 using MediatR;
+using Messages;
 using MongoDB.Driver;
 using Serilog;
 using System;
@@ -21,11 +23,12 @@ namespace Application.Handlers.AuthenticationHandlers
     {
         private readonly IRepositoryManager _repository;
         private IMapper _mapper;
-
-        public RegisterCustomerHandler(IRepositoryManager repository, IMapper mapper)
+        private IPublishEndpoint _publishEndpoint;
+        public RegisterCustomerHandler(IRepositoryManager repository, IMapper mapper, IPublishEndpoint publishEndpoint)
         {
             _repository = repository;
             _mapper = mapper;
+            _publishEndpoint = publishEndpoint;
         }
 
         public async Task<CustomerDto> Handle(RegisterCustomerCommand request, CancellationToken cancellationToken)
@@ -37,6 +40,10 @@ namespace Application.Handlers.AuthenticationHandlers
                 var result = await _repository.SaveAsync();
                 var c = await _repository.Customer.GetCustomerByLoginAsync(request.customerForRegistration.Email, false);
                 var customerToReturn = _mapper.Map<CustomerDto>(c);
+                await _publishEndpoint.Publish<CustomerCreated>(new
+                {
+                    CustomerId = customerToReturn.CustomerId
+                });
                 return customerToReturn;
             }
             catch (UniqueConstraintException e)

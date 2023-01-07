@@ -62,6 +62,11 @@ namespace MongoRepository.Repository
             //   customer.Accounts = accounts;
             return customer;
         }
+
+        public void UpdateCustomerTotal(Customer customer)
+        {
+            _customers.UpdateOne(Builders<Customer>.Filter.Eq(c => c.CustomerId, customer.CustomerId), Builders<Customer>.Update.Set(a => a.Total, customer.Total));
+        }
     }
 
 }

@@ -116,7 +116,7 @@ namespace Presentation.Controllers
             }
 
             await _sender.Send(new SendTransactionForAccountCommand(accountId, balance: balance, false));
-            return Ok();
+            return NoContent();
         }
     }
 }

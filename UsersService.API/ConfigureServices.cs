@@ -1,4 +1,5 @@
-﻿using Application.Behaviors;
+﻿using AccountsService.API.Messages;
+using Application.Behaviors;
 using Application.Configurations;
 using Application.ErrorModels;
 using Application.Exceptions;
@@ -6,7 +7,9 @@ using Application.formatters;
 using Application.Interfaces.IRepository;
 using Application.Interfaces.IServices;
 using FluentValidation;
+using MassTransit;
 using MediatR;
+using Messages;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +23,7 @@ using SqlRepository.Repository;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
+using UsersService.API.Consumers;
 
 namespace UsersService.API
 {
@@ -37,6 +41,7 @@ namespace UsersService.API
             ConfigureValidationBehavior(services);
             ConfigureSwagger(services);
             ConfigureServiceManager(services);
+            ConfigureMassTransit(services);
         }
         public static void ConfigureCors(this IServiceCollection services)
         {
@@ -131,7 +136,11 @@ namespace UsersService.API
                     ValidateIssuerSigningKey = true,
                     ValidateLifetime = true,
                     ValidIssuer = jwtConfiguration.ValidIssuer,
-                    ValidAudience = jwtConfiguration.ValidAudience,
+                    ValidAudiences = new List<string>
+                    {
+                        "https://localhost:7006",
+                        "https://localhost:7007"
+                    },
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
 
                 };
@@ -206,6 +215,28 @@ namespace UsersService.API
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
+            });
+
+        }
+        public static void ConfigureMassTransit(IServiceCollection services)
+        {
+            services.AddMassTransit(mt =>
+            {
+                mt.AddConsumer<TotalChangedConsumer>();
+                mt.UsingRabbitMq((context, config) =>
+                {
+                    config.Host("localhost", h =>
+                    {
+                        h.Username("guest");
+                        h.Password("guest");
+
+                    });
+                    config.Publish<CustomerCreated>();
+                    config.ReceiveEndpoint("total-changed", e =>
+                    {
+                        e.ConfigureConsumer<TotalChangedConsumer>(context);
+                    });
+                });
             });
 
         }
